@@ -1,8 +1,13 @@
-# Multi Color Blob Tracking Example
-#
-# This example shows off multi color blob tracking using the OpenMV Cam.
+"""
+Colours robot
+sensor, image - working with Camera
+time and math do logic in the code
+"""
+import time
+import math
+import sensor
+# import image now is unused
 
-import sensor, image, time, math
 
 # Color Tracking Thresholds (L Min, L Max, A Min, A Max, B Min, B Max)
 # The below thresholds track in general red/green things. You may wish to tune them...
@@ -32,7 +37,7 @@ clock = time.clock()
 
 dict_of_blobs_dimensions = {"red": 0, "green": 0}
 
-while(True):
+while True:
     clock.tick()
     img = sensor.snapshot()
     # Цикл по 2 видам threshold
@@ -47,15 +52,15 @@ while(True):
             img.draw_rectangle(blob.rect())
             img.draw_cross(blob.cx(), blob.cy())
             # Note - the blob rotation is unique to 0-180 only.
-            img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.rotation())))], size=20)
+            img.draw_keypoints([(blob.cx(), blob.cy(),int(math.degrees(blob.rotation())))], size=20)
             # Получение размеров цилиндра на кадре
             blob_area = blob.area()
             if work_threshold == threshold_red:
-                color = "red"
+                COLOR = "red"
             else:
-                color = "green"
+                COLOR = "green"
             # Запись в нужное значение в словаре
-            dict_of_blobs_dimensions[color] = blob_area
+            dict_of_blobs_dimensions[COLOR] = blob_area
     # Проверка, какой цилиднр ближе по площади
     if dict_of_blobs_dimensions["red"] == max(dict_of_blobs_dimensions.values()):
         print("right")

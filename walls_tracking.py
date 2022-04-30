@@ -1,8 +1,12 @@
-# Multi Color Blob Tracking Example
+"""Multi Color Blob Tracking Example"""
 #
 # This example shows off multi color blob tracking using the OpenMV Cam.
 
-import sensor, image, time, math
+import time
+import math
+import sensor
+# import image is unused
+
 
 # Color Tracking Thresholds (L Min, L Max, A Min, A Max, B Min, B Max)
 # The below thresholds track in general red/green things. You may wish to tune them...
@@ -18,10 +22,8 @@ sensor.set_auto_gain(False) # must be turned off for color tracking
 sensor.set_auto_whitebal(False) # must be turned off for color tracking
 clock = time.clock()
 
-
-
-# Получение 2 самых больших блобов
 def two_max_blobs(array):
+    """Получение 2 самых больших блобов"""
     if len(array) >= 2:
         maxx = array[0]
 
@@ -30,28 +32,31 @@ def two_max_blobs(array):
                 maxx = i
         for i in array:
             if i != maxx:
-                perMaxx = i
+                per_maxx = i
                 break
 
         for i in array:
-            if i.area() > perMaxx.area() and i != maxx:
-                perMaxx = i
+            if i.area() > per_maxx.area() and i != maxx:
+                per_maxx = i
 
-        return [maxx, perMaxx]
+    return [maxx, per_maxx]
 
 
 def catch_right_wall(walls):
+    """i wanna see right wall"""
     if walls[0].cx() < walls[1].cx():
         return walls[1]
     return walls[0]
 
 def catch_left_wall(walls):
+    """i wanna see left wall"""
     if walls[0].cx() < walls[1].cx():
         return walls[0]
     return walls[1]
 
 def detect_ways(walls):
-    if (walls[0].cx() < walls[1].cx()):
+    """I wanna detect wall"""
+    if walls[0].cx() < walls[1].cx():
         return walls
     return [walls[1], walls[0]]
 
@@ -60,11 +65,12 @@ def detect_ways(walls):
 # returned by "find_blobs" below. Change "pixels_threshold" and "area_threshold" if you change the
 # camera resolution. Don't set "merge=True" becuase that will merge blobs which we don't want here.
 
-while(True):
+while True:
     arrayOfBlobs = []
     clock.tick()
     img = sensor.snapshot()
-    for blob in img.find_blobs(thresholds, roi=(0, 100, 320, 140), pixels_threshold=200, area_threshold=200):
+    for blob in img.find_blobs(thresholds, roi=(0, 100, 320, 140), pixels_threshold=200,
+                               area_threshold=200):
         # These values depend on the blob not being circular - otherwise they will be shaky.
         # lastTest roi=(0, 160, 320, 80)
         if blob.elongation() > 0.5:
@@ -93,7 +99,7 @@ while(True):
     elif len(arrayOfBlobs) == 1:
         wall = arrayOfBlobs[0]
         # Если стенка слева, то поворот направо
-        if (wall.cx() < 160):
+        if wall.cx() < 160:
             print(wall.area() / 2)
 
         else:

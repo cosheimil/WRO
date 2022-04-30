@@ -1,8 +1,11 @@
-# Multi Color Blob Tracking Example
+"""Multi Color Blob Tracking Example"""
 #
 # This example shows off multi color blob tracking using the OpenMV Cam.
-
-import sensor, image, time, math, pyb
+import time
+import math
+import sensor
+# import image now is unused
+import pyb
 
 # Color Tracking Thresholds (L Min, L Max, A Min, A Max, B Min, B Max)
 # The below thresholds track in general red/green things. You may wish to tune them...
@@ -31,29 +34,32 @@ chA = tim.channel(3, pyb.Timer.PWM, pin=pyb.Pin("P4"))
 
 servo = pyb.Servo(2)
 
-# Определения размера рандомного блоба из списка блобов в этой части
-def find_blob(img, ROI):
-    for blob in img.find_blobs(thresholds, roi=ROI, pixels_threshold=200, area_threshold=200):
+
+def find_blob(img, roi):
+    """Определения размера рандомного блоба из списка блобов в этой части"""
+    for blob in img.find_blobs(thresholds, roi=roi, pixels_threshold=200, area_threshold=200):
         density = blob.density()
         return density * blob.area(), blob
         #return blob
     return False, False
 
-# Для определения самого большого видимого блоба в этой части
-def find_biggest_blob(img, ROI):
-    blobs = img.find_blobs(thresholds, roi=ROI, pixels_threshold=200, area_threshold=200)
+
+def find_biggest_blob(img, roi):
+    """Для определения самого большого видимого блоба в этой части"""
+    blobs = img.find_blobs(thresholds, roi=roi, pixels_threshold=200, area_threshold=200)
     if len(blobs) == 0:
         return False, False
 
-    maxBlob = blobs[0]
+    max_blob = blobs[0]
     for blob in blobs:
-        if blob.area() > maxBlob.area():
-            maxBlob = blob
-    return maxBlob.density() * maxBlob.area(), maxBlob
+        if blob.area() > max_blob.area():
+            max_blob = blob
+    return max_blob.density() * max_blob.area(), max_blob
 
 
 
 def draw_blob(blob, img):
+    """drawing blobs"""
     if blob:
         if blob.elongation() > 0.5:
             img.draw_edges(blob.min_corners(), color=(255,0,0))
@@ -61,42 +67,46 @@ def draw_blob(blob, img):
             img.draw_line(blob.minor_axis_line(), color=(0,0,255))
         img.draw_rectangle(blob.rect())
         img.draw_cross(blob.cx(), blob.cy())
-        img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.rotation())))], size=20)
+        img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.ROTATION())))], size=20)
 
 
-err = 0
-oldDif = 0
+ERR = 0
+OLDDIF = 0
 MAX_ERROR = 10000
 MIN_ERROR = -10000
 KP = 1.5
 KD = 0.5
 KI = 0.5
 
-# Описание ПИД регулятора для системы
-def PID(dif):
-    global err, oldDif;
+
+def pid(dif):
+    """Описание ПИД регулятора для системы"""
+    global ERR, OLDDIF
 
     proportional = dif * KP
-    defferential = (dif - oldDif)* KD
+    defferential = (dif - OLDDIF)* KD
 
-    err += dif
-    if err < MIN_ERROR:
-        err = MIN_ERROR
-    if err > MAX_ERROR:
-        err = MAX_ERROR
-    integral = err * KI
+    ERR += dif
+    ERR = max(ERR, MIN_ERROR)
+    ERR = min(ERR, MAX_ERROR)
+    
+    # if ERR < MIN_ERROR:
+    #     ERR = MIN_ERROR
+    # if ERR > MAX_ERROR:
+    #     ERR = MAX_ERROR
+    integral = ERR * KI
 
-    oldDif = dif
+    OLDDIF = dif
     return (proportional + defferential + integral) / 20400
 
-LeftROI = (0, 160, 160, 80)
-RightROI = (160, 160, 160, 80)
-rotation = False
-flag = ""
-lastflag = ""
-non_checked = True
+LEFTROI = (0, 160, 160, 80)
+RIGHTROI = (160, 160, 160, 80)
+ROTATION = False
+FLAG = ""
+LASTFLAG = ""
+NOTCHECKED = True
 
-while(True):
+while True:
     clock.tick()
     blue_lines = []
     orange_lines = []
@@ -104,58 +114,59 @@ while(True):
 
     img = sensor.snapshot().lens_corr(strength = 3, zoom = 1.2)
 
-    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 120, 320, 120), area_threshold=200):
+    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 120, 320, 120),
+                               area_threshold=200):
         draw_blob(blob, img)
         blue_lines.append(blob)
 
-    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=(0, 120, 320, 120), area_threshold=200):
+    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=(0, 120, 320, 120),
+                               area_threshold=200):
         draw_blob(blob, img)
         orange_lines.append(blob)
 
     if len(blue_lines) != 0 or len(orange_lines) != 0:
         # блок для определения направления
-        if non_checked:
+        if NOTCHECKED:
             if len(orange_lines) != 0:
-                flag = "orange"
+                FLAG = "orange"
             else:
-                flag = "blue"
-            checked = False
-        #
+                FLAG = "blue"
+            CHECKED = False
         # блок определения последней линии, чтобы понимать направление дальше
         if len(orange_lines) != 0:
-            lastflag = "orange"
+            LASTFLAG = "orange"
         elif len(orange_lines) == 0 and len(blue_lines) != 0:
-            lastflag = "blue"
-        rotation = True
+            LASTFLAG = "blue"
+        ROTATION = True
     else:
-        flag = lastflag
-        rotation = False
+        FLAG = LASTFLAG
+        ROTATION = False
 
-    if rotation:
-        print("rotation true")
+    if ROTATION:
+        print("ROTATION true")
 
-        if flag == "blue":
+        if FLAG == "blue":
             print("right")
             servo.angle(20)
         else:
             print("left")
             servo.angle(-10)
     else:
-        print("rotation false")
+        print("ROTATION false")
         if len(img.find_blobs(thresholds, pixels_threshold=200, area_threshold=200)) != 0:
 
             # Идея: искать блобы в левой и правой половине катинки
             # Найти черные блобы в правой и левой части
             # Сравнить кол-во пикселей справа и слева
             # Определить, куда двигаться
-            leftBlobWeight, leftBlob = find_biggest_blob(img, LeftROI)
-            rightBlobWeight, rightBlob = find_biggest_blob(img, RightROI)
+            leftBlobWeight, leftBlob = find_biggest_blob(img, LEFTROI)
+            rightBlobWeight, rightBlob = find_biggest_blob(img, RIGHTROI)
             draw_blob(leftBlob, img)
             draw_blob(rightBlob, img)
 
             dif = leftBlobWeight - rightBlobWeight
 
-            #difPersent = PID(dif)
+            #difPersent = pid(dif)
             difPersent = dif / 20400
 
             print(-difPersent * 36 + 6)
@@ -166,11 +177,3 @@ while(True):
 
         # Делаем определение в правой и левой части, чтобы
         # там найти блобы и понять их размеры
-
-
-
-
-
-
-
-

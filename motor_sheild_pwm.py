@@ -1,4 +1,4 @@
-# Motor Shield PWM Example
+"""Motor Shield PWM Example"""
 #
 # This example shows off how to control the motor shield on your
 # OpenMV Cam. The motor shield is controlled by using the PYB module
@@ -42,7 +42,7 @@ chA = tim.channel(4, pyb.Timer.PWM, pin=pyb.Pin("P5"))
 servo = pyb.Servo(2)
 servo.angle(90, 500)
 
-while (True):
+while True:
     #for i in range(100):
         #pyb.delay(100)
         #chA.pulse_width_percent(99 - i)
