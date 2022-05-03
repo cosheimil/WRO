@@ -10,7 +10,7 @@ import pyb
 # Color Tracking Thresholds (L Min, L Max, A Min, A Max, B Min, B Max)
 # The below thresholds track in general red/green things. You may wish to tune them...
 thresholds = [(0, 12, -128, 8, -10, 47)] #black walls
-thresholds_blue_line = [(0, 100, 12, 120, -56, -6)] # синий цвет
+thresholds_blue_line = [(19, 100, -1, 20, -128, -15)] # синий цвет
 thresholds_orange_line = [((0, 100, 3, 120, -4, 127))] # оранж цвет
 # You may pass up to 16 thresholds above. However, it's not really possible to segment any
 # scene with 16 thresholds before color thresholds start to overlap heavily.
@@ -67,8 +67,13 @@ def draw_blob(blob, img):
             img.draw_line(blob.minor_axis_line(), color=(0,0,255))
         img.draw_rectangle(blob.rect())
         img.draw_cross(blob.cx(), blob.cy())
-        img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.ROTATION())))], size=20)
+        img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.rotation())))], size=20)
 
+def sum_weights(lines):
+    summary_weight = 0
+    for l in lines:
+        summary_weight += l.area()
+    return summary_weight
 
 ERR = 0
 OLDDIF = 0
@@ -89,7 +94,7 @@ def pid(dif):
     ERR += dif
     ERR = max(ERR, MIN_ERROR)
     ERR = min(ERR, MAX_ERROR)
-    
+
     # if ERR < MIN_ERROR:
     #     ERR = MIN_ERROR
     # if ERR > MAX_ERROR:
@@ -99,27 +104,30 @@ def pid(dif):
     OLDDIF = dif
     return (proportional + defferential + integral) / 20400
 
-LEFTROI = (0, 160, 160, 80)
-RIGHTROI = (160, 160, 160, 80)
+LEFTROI = (0, 160, 120, 80)
+RIGHTROI = (200, 160, 120, 80)
 ROTATION = False
 FLAG = ""
 LASTFLAG = ""
 NOTCHECKED = True
+ROTK = 0
 
 while True:
     clock.tick()
+    chA.pulse_width_percent(60)
+
     blue_lines = []
     orange_lines = []
     # Убираем "рыбий глаз"
 
     img = sensor.snapshot().lens_corr(strength = 3, zoom = 1.2)
 
-    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 120, 320, 120),
+    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 180, 320, 80),
                                area_threshold=200):
         draw_blob(blob, img)
         blue_lines.append(blob)
 
-    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=(0, 120, 320, 120),
+    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=(0, 180, 320, 80),
                                area_threshold=200):
         draw_blob(blob, img)
         orange_lines.append(blob)
@@ -131,26 +139,36 @@ while True:
                 FLAG = "orange"
             else:
                 FLAG = "blue"
-            CHECKED = False
+            NOTCHECKED = False
         # блок определения последней линии, чтобы понимать направление дальше
+        # пусть если видит линию, то меняет показателей в зависимости от цвета
+        # поворот направо - отрицательное значение
         if len(orange_lines) != 0:
-            LASTFLAG = "orange"
+            ROTK -= sum_weights(orange_lines)
         elif len(orange_lines) == 0 and len(blue_lines) != 0:
-            LASTFLAG = "blue"
+            ROTK += sum_weights(blue_lines)
         ROTATION = True
+
     else:
-        FLAG = LASTFLAG
         ROTATION = False
 
     if ROTATION:
         print("ROTATION true")
 
-        if FLAG == "blue":
+        #if FLAG == "blue":
+            #print("right")
+            #servo.angle(20)
+        #else:
+            #print("left")
+            #servo.angle(-10)
+        if ROTK / 100 < 0:
             print("right")
-            servo.angle(20)
+            servo.angle(-10)
+            #servo.angle((ROTK * 36 + 6) % 30)
         else:
             print("left")
-            servo.angle(-10)
+            servo.angle(20)
+            #servo.angle((ROTK * 36 + 6) % 30)
     else:
         print("ROTATION false")
         if len(img.find_blobs(thresholds, pixels_threshold=200, area_threshold=200)) != 0:
@@ -172,7 +190,7 @@ while True:
             print(-difPersent * 36 + 6)
 
             servo.angle((-difPersent * 36 + 6) % 30)
-            chA.pulse_width_percent(50)
+            #chA.pulse_width_percent(20)
 
 
         # Делаем определение в правой и левой части, чтобы
