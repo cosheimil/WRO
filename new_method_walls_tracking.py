@@ -122,12 +122,12 @@ while True:
 
     img = sensor.snapshot().lens_corr(strength = 3, zoom = 1.2)
 
-    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 180, 320, 80),
+    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 160, 320, 80),
                                area_threshold=200):
         draw_blob(blob, img)
         blue_lines.append(blob)
 
-    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=(0, 180, 320, 80),
+    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=(0, 160, 320, 80),
                                area_threshold=200):
         draw_blob(blob, img)
         orange_lines.append(blob)
@@ -185,11 +185,11 @@ while True:
             dif = leftBlobWeight - rightBlobWeight
 
             #difPersent = pid(dif)
-            difPersent = dif / 20400
+            difPersent = dif / 9600
 
             print(-difPersent * 36 + 6)
 
-            servo.angle((-difPersent * 36 + 6) % 30)
+            servo.angle((-difPersent * 36 + 6))
             #chA.pulse_width_percent(20)
 
 
