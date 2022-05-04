@@ -104,8 +104,8 @@ def pid(dif):
     OLDDIF = dif
     return (proportional + defferential + integral)
 
-LEFTROI = (0, 160, 100, 80)
-RIGHTROI = (220, 160, 100, 80)
+LEFTROI = (0, 100, 100, 140)
+RIGHTROI = (220, 100, 100, 140)
 ROTATION = False
 FLAG = ""
 LASTFLAG = ""
@@ -116,23 +116,22 @@ CORNER_COUNT = 0
 while True:
     clock.tick()
     # Здесь проверка на кол-во пройденных поворотов
-    if CORNER_COUNT != 4:
-        chA.pulse_width_percent(60)
+    if CORNER_COUNT <= 12:
+        chA.pulse_width_percent(40)
     else:
         chA.pulse_width_percent(100)
 
     blue_lines = []
     orange_lines = []
-    # Убираем "рыбий глаз"
 
     img = sensor.snapshot()
 
-    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 160, 320, 80),
+    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 140, 320, 100),
                                area_threshold=200):
         draw_blob(blob, img)
         blue_lines.append(blob)
 
-    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=(0, 160, 320, 80),
+    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=(0, 140, 320, 100),
                                area_threshold=200):
         draw_blob(blob, img)
         orange_lines.append(blob)
@@ -167,11 +166,11 @@ while True:
             #servo.angle(-10)
         if ROTK / 100 < 0:
             print("right")
-            servo.angle(-14)
+            servo.angle(-10)
             #servo.angle((ROTK * 36 + 6) % 30)
         else:
             print("left")
-            servo.angle(20)
+            servo.angle(22)
             #servo.angle((ROTK * 36 + 6) % 30)
     else:
         print("ROTATION false")
@@ -188,8 +187,8 @@ while True:
 
             dif = leftBlobWeight - rightBlobWeight
 
-            #difPersent = pid(dif) % 8000
-            difPersent = dif / 8000
+            #difPersent = pid(dif) / 8000
+            difPersent = dif / 14000
 
             print(-difPersent * 36 + 6)
 
