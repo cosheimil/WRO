@@ -1,9 +1,10 @@
 """Testing all funcs 2gether"""
-import time
 import math
-import sensor
-# import image now is unused
+import time
 
+import sensor
+
+# import image now is unused
 
 
 ENABLE_LENS_COR = False
@@ -12,15 +13,17 @@ thresholds = [(0, 12, -128, 8, -10, 47)]
 sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QVGA)
-sensor.skip_frames(time = 2000)
-sensor.set_auto_gain(False) # must be turned off for color tracking
-sensor.set_auto_whitebal(False) # must be turned off for color tracking
+sensor.skip_frames(time=2000)
+sensor.set_auto_gain(False)  # must be turned off for color tracking
+sensor.set_auto_whitebal(False)  # must be turned off for color tracking
 clock = time.clock()
 
 
 def find_blob(img, roi):
     """Определения размера рандомного блоба из списка блобов в этой части"""
-    for blob in img.find_blobs(thresholds, roi=roi, pixels_threshold=200, area_threshold=200):
+    for blob in img.find_blobs(
+        thresholds, roi=roi, pixels_threshold=200, area_threshold=200
+    ):
         density = blob.density()
         return density * blob.area(), blob
     return False, False
@@ -28,7 +31,9 @@ def find_blob(img, roi):
 
 def find_biggest_blob(img, roi):
     """Для определения самого большого видимого блоба в этой части"""
-    blobs = img.find_blobs(thresholds, roi=roi, pixels_threshold=200, area_threshold=200)
+    blobs = img.find_blobs(
+        thresholds, roi=roi, pixels_threshold=200, area_threshold=200
+    )
     if len(blobs) == 0:
         return False, False
 
@@ -39,17 +44,19 @@ def find_biggest_blob(img, roi):
     return max_blob.density() * max_blob.area(), max_blob
 
 
-
 def draw_blob(blob, img):
     """now we r drawing this blob"""
     if blob:
         if blob.elongation() > 0.5:
-            img.draw_edges(blob.min_corners(), color=(255,0,0))
-            img.draw_line(blob.major_axis_line(), color=(0,255,0))
-            img.draw_line(blob.minor_axis_line(), color=(0,0,255))
+            img.draw_edges(blob.min_corners(), color=(255, 0, 0))
+            img.draw_line(blob.major_axis_line(), color=(0, 255, 0))
+            img.draw_line(blob.minor_axis_line(), color=(0, 0, 255))
         img.draw_rectangle(blob.rect())
         img.draw_cross(blob.cx(), blob.cy())
-        img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.rotation())))], size=20)
+        img.draw_keypoints(
+            [(blob.cx(), blob.cy(), int(math.degrees(blob.rotation())))], size=20
+        )
+
 
 def catch_first_line_r(lines):
     """func is seeing for lines"""
@@ -74,31 +81,28 @@ while True:
     img = sensor.snapshot()
 
     ############# lines #############
-    if ENABLE_LENS_COR: 
-        img.lens_corr(1.8) # for 2.8mm lens...
+    if ENABLE_LENS_COR:
+        img.lens_corr(1.8)  # for 2.8mm lens...
 
     lines = []
-    for l in img.find_line_segments(roi=(20, 60, 120, 30), merge_distance=40,
-                                    max_theta_difference=25):
+    for l in img.find_line_segments(
+        roi=(20, 60, 120, 30), merge_distance=40, max_theta_difference=25
+    ):
         if (MIN_GEGREE <= l.theta()) and (l.theta() <= MAX_DEGREE):
-            img.draw_line(l.line(), color = (255, 0, 0), thickness=5)
+            img.draw_line(l.line(), color=(255, 0, 0), thickness=5)
             # Добавление координат конечных точек прямой в общий массив
             lines.append(l)
 
     r_min_ind = catch_first_line_r(lines)
     if 0 <= r_min_ind < len(lines):
         img.draw_line(lines[r_min_ind].line(), color=(0, 255, 0), thickness=5)
-    # Получение нужной линии
+        # Получение нужной линии
         impLine = lines[r_min_ind]
-    # Определение нужного угла
+        # Определение нужного угла
         angle = 90 - impLine.theta()
         print(angle)
 
     ######################################
-
-
-
-
 
     # Делаем определение в правой и левой части, чтобы
     # там найти блобы и понять их размеры
@@ -115,4 +119,3 @@ while True:
             print("right")
         else:
             print("left")
-

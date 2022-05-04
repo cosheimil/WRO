@@ -11,24 +11,24 @@ import pyb
 # below control the speed. The direction for each motor
 # is set by an H-Bridge where A0/1 are the two sides of
 # one H-Bridge driver. B0/1 are another H-Bridge.
-pinADir0 = pyb.Pin('P4', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
-pinADir1 = pyb.Pin('P5', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
-#pinBDir0 = pyb.Pin('P1', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
-#pinBDir1 = pyb.Pin('P0', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
+pinADir0 = pyb.Pin("P4", pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
+pinADir1 = pyb.Pin("P5", pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
+# pinBDir0 = pyb.Pin('P1', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
+# pinBDir1 = pyb.Pin('P0', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
 
 # Dir0/1 must be not equal to each other for forward or backwards
 # operation. If they are equal then that's a brake operation.
 # If they are not equal then the motor will spin one way other the
 # other depending on it's hookup and the value of dir 0.
-#pinADir0.value(0)
+# pinADir0.value(0)
 pinADir0.value(1)
 
 # Dir0/1 must be not equal to each other for forward or backwards
 # operation. If they are equal then that's a brake operation.
 # If they are not equal then the motor will spin one way other the
 # other depending on it's hookup and the value of dir 0.
-#pinBDir0.value(0)
-#pinBDir1.value(1)
+# pinBDir0.value(0)
+# pinBDir1.value(1)
 
 # Create a timer object running at 1KHz which which will power the
 # PWM output on our OpenMV Cam. Just needs to be created once.
@@ -38,17 +38,17 @@ tim = pyb.Timer(2, freq=1000)
 # These timers control the speed of the motors. You will be setting
 # the PWM percentage of these timers repeatedly in your loop.
 chA = tim.channel(4, pyb.Timer.PWM, pin=pyb.Pin("P5"))
-#chB = tim.channel(2, pyb.Timer.PWM, pin=pyb.Pin("P5"))
+# chB = tim.channel(2, pyb.Timer.PWM, pin=pyb.Pin("P5"))
 servo = pyb.Servo(2)
 servo.angle(90, 500)
 
 while True:
-    #for i in range(100):
-        #pyb.delay(100)
-        #chA.pulse_width_percent(99 - i)
+    # for i in range(100):
+    # pyb.delay(100)
+    # chA.pulse_width_percent(99 - i)
     chA.pulse_width_percent(70)
 
-    #for i in range(100):
-        #pyb.delay(100)
-        #chA.pulse_width_percent(99-i)
-        #chB.pulse_width_percent(i)
+    # for i in range(100):
+    # pyb.delay(100)
+    # chA.pulse_width_percent(99-i)
+    # chB.pulse_width_percent(i)
