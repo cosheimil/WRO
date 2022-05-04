@@ -102,25 +102,30 @@ def pid(dif):
     integral = ERR * KI
 
     OLDDIF = dif
-    return (proportional + defferential + integral) / 20400
+    return (proportional + defferential + integral)
 
-LEFTROI = (0, 160, 120, 80)
-RIGHTROI = (200, 160, 120, 80)
+LEFTROI = (0, 160, 100, 80)
+RIGHTROI = (220, 160, 100, 80)
 ROTATION = False
 FLAG = ""
 LASTFLAG = ""
 NOTCHECKED = True
 ROTK = 0
+CORNER_COUNT = 0
 
 while True:
     clock.tick()
-    chA.pulse_width_percent(60)
+    # Здесь проверка на кол-во пройденных поворотов
+    if CORNER_COUNT != 4:
+        chA.pulse_width_percent(60)
+    else:
+        chA.pulse_width_percent(100)
 
     blue_lines = []
     orange_lines = []
     # Убираем "рыбий глаз"
 
-    img = sensor.snapshot().lens_corr(strength = 3, zoom = 1.2)
+    img = sensor.snapshot()
 
     for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=(0, 160, 320, 80),
                                area_threshold=200):
@@ -133,20 +138,19 @@ while True:
         orange_lines.append(blob)
 
     if len(blue_lines) != 0 or len(orange_lines) != 0:
-        # блок для определения направления
-        if NOTCHECKED:
-            if len(orange_lines) != 0:
-                FLAG = "orange"
-            else:
-                FLAG = "blue"
-            NOTCHECKED = False
         # блок определения последней линии, чтобы понимать направление дальше
         # пусть если видит линию, то меняет показателей в зависимости от цвета
         # поворот направо - отрицательное значение
         if len(orange_lines) != 0:
             ROTK -= sum_weights(orange_lines)
+
+            # test
+            FLAG = "orange"
         elif len(orange_lines) == 0 and len(blue_lines) != 0:
             ROTK += sum_weights(blue_lines)
+
+            # test
+            FLAG = "blue"
         ROTATION = True
 
     else:
@@ -163,7 +167,7 @@ while True:
             #servo.angle(-10)
         if ROTK / 100 < 0:
             print("right")
-            servo.angle(-10)
+            servo.angle(-14)
             #servo.angle((ROTK * 36 + 6) % 30)
         else:
             print("left")
@@ -184,8 +188,8 @@ while True:
 
             dif = leftBlobWeight - rightBlobWeight
 
-            #difPersent = pid(dif)
-            difPersent = dif / 9600
+            #difPersent = pid(dif) % 8000
+            difPersent = dif / 8000
 
             print(-difPersent * 36 + 6)
 
@@ -195,3 +199,10 @@ while True:
 
         # Делаем определение в правой и левой части, чтобы
         # там найти блобы и понять их размеры
+
+    # Подсчет кол-ва пройденных кругов
+    if LASTFLAG != FLAG:
+        LASTFLAG = FLAG
+        CORNER_COUNT += 0.5
+
+
