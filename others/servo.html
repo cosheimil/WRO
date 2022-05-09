@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://docs.openmv.io/library/pyb.Servo.html -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths" lang="en" style="" data-darkreader-mode="dynamic" data-darkreader-scheme="dark"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style class="darkreader darkreader--fallback" media="screen"></style><style class="darkreader darkreader--text" media="screen"></style><style class="darkreader darkreader--invert" media="screen">.jfk-bubble.gtx-bubble, .captcheck_answer_label > input + img, span#closed_text > img[src^="https://www.gstatic.com/images/branding/googlelogo"], span[data-href^="https://www.hcaptcha.com/"] > #icon, #bit-notification-bar-iframe, ::-webkit-calendar-picker-indicator {
+    filter: invert(100%) hue-rotate(180deg) contrast(90%) !important;
+}</style><style class="darkreader darkreader--inline" media="screen">[data-darkreader-inline-bgcolor] {
+  background-color: var(--darkreader-inline-bgcolor) !important;
+}
+[data-darkreader-inline-bgimage] {
+  background-image: var(--darkreader-inline-bgimage) !important;
+}
+[data-darkreader-inline-border] {
+  border-color: var(--darkreader-inline-border) !important;
+}
+[data-darkreader-inline-border-bottom] {
+  border-bottom-color: var(--darkreader-inline-border-bottom) !important;
+}
+[data-darkreader-inline-border-left] {
+  border-left-color: var(--darkreader-inline-border-left) !important;
+}
+[data-darkreader-inline-border-right] {
+  border-right-color: var(--darkreader-inline-border-right) !important;
+}
+[data-darkreader-inline-border-top] {
+  border-top-color: var(--darkreader-inline-border-top) !important;
+}
+[data-darkreader-inline-boxshadow] {
+  box-shadow: var(--darkreader-inline-boxshadow) !important;
+}
+[data-darkreader-inline-color] {
+  color: var(--darkreader-inline-color) !important;
+}
+[data-darkreader-inline-fill] {
+  fill: var(--darkreader-inline-fill) !important;
+}
+[data-darkreader-inline-stroke] {
+  stroke: var(--darkreader-inline-stroke) !important;
+}
+[data-darkreader-inline-outline] {
+  outline-color: var(--darkreader-inline-outline) !important;
+}
+[data-darkreader-inline-stopcolor] {
+  stop-color: var(--darkreader-inline-stopcolor) !important;
+}</style><style class="darkreader darkreader--variables" media="screen">:root {
+   --darkreader-neutral-background: #131516;
+   --darkreader-neutral-text: #d8d4cf;
+   --darkreader-selection-background: #004daa;
+   --darkreader-selection-text: #e8e6e3;
+}</style><style class="darkreader darkreader--root-vars" media="screen"></style><style class="darkreader darkreader--user-agent" media="screen">html {
+    background-color: #181a1b !important;
+}
+html {
+    color-scheme: dark !important;
+}
+html, body {
+    background-color: #181a1b;
+}
+html, body {
+    border-color: #736b5e;
+    color: #e8e6e3;
+}
+a {
+    color: #3391ff;
+}
+table {
+    border-color: #545b5e;
+}
+::placeholder {
+    color: #b2aba1;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: #404400 !important;
+    color: #e8e6e3 !important;
+}
+::-webkit-scrollbar {
+    background-color: #202324;
+    color: #aba499;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #454a4d;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #575e62;
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: #484e51;
+}
+::-webkit-scrollbar-corner {
+    background-color: #181a1b;
+}
+::selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}
+::-moz-selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>class Servo – 3-wire hobby servo driver — MicroPython 1.15 documentation</title>
+<link rel="shortcut icon" href="https://docs.openmv.io/_static/openmv.ico">
+<script type="text/javascript" src="./servo_files/modernizr.min.js"></script><meta name="darkreader" content="ebc940475dab450c97f08329ea9572d1"><style class="darkreader darkreader--override" media="screen">.vimvixen-hint {
+    background-color: #7b5300 !important;
+    border-color: #d8b013 !important;
+    color: #f3e8c8 !important;
+}
+::placeholder {
+    opacity: 0.5 !important;
+}
+#edge-translate-panel-body,
+.MuiTypography-body1 {
+    color: var(--darkreader-neutral-text) !important;
+}
+gr-main-header {
+    background-color: #0f3a48 !important;
+}
+embed[type="application/pdf"][src="about:blank"] { filter: invert(100%) contrast(90%); }</style>
+<script type="text/javascript" id="documentation_options" data-url_root="../" src="./servo_files/documentation_options.js"></script>
+<script type="text/javascript" src="./servo_files/jquery.js"></script>
+<script type="text/javascript" src="./servo_files/underscore.js"></script>
+<script type="text/javascript" src="./servo_files/doctools.js"></script>
+<script type="text/javascript" src="./servo_files/language_data.js"></script>
+<script type="text/javascript" src="./servo_files/theme.js"></script>
+<link rel="stylesheet" href="./servo_files/theme.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="stylesheet" href="./servo_files/pygments.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="stylesheet" href="./servo_files/customstyle.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="index" title="Index" href="https://docs.openmv.io/genindex.html">
+<link rel="search" title="Search" href="https://docs.openmv.io/search.html">
+<link rel="next" title="class SPI – a master-driven serial protocol" href="https://docs.openmv.io/library/pyb.SPI.html">
+<link rel="prev" title="class RTC – real time clock" href="https://docs.openmv.io/library/pyb.RTC.html">
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav data-toggle="wy-nav-shift" class="wy-nav-side">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a href="https://docs.openmv.io/index.html" class="icon icon-home"> MicroPython
+<img src="./servo_files/web-logo-sticky.png" class="logo" alt="Logo">
+</a>
+<div class="version">
+1.15
+</div>
+<div role="search">
+<form id="rtd-search-form" class="wy-form" action="https://docs.openmv.io/search.html" method="get">
+<input type="text" name="q" placeholder="Search docs">
+<input type="hidden" name="check_keywords" value="yes">
+<input type="hidden" name="area" value="default">
+</form>
+</div>
+</div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="https://docs.openmv.io/library/index.html"><span class="toctree-expand"></span>MicroPython libraries</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#python-standard-libraries-and-micro-libraries">Python standard libraries and micro-libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#micropython-specific-libraries">MicroPython-specific libraries</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="https://docs.openmv.io/library/index.html#libraries-specific-to-the-openmv-cam"><span class="toctree-expand"></span>Libraries specific to the OpenMV Cam</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html"><span class="toctree-expand"></span><code class="docutils literal notranslate"><span class="pre">pyb</span></code> — functions related to the board</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#time-related-functions">Time related functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#reset-related-functions">Reset related functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#interrupt-related-functions">Interrupt related functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#power-related-functions">Power related functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#miscellaneous-functions">Miscellaneous functions</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.sensor.html"><code class="docutils literal notranslate"><span class="pre">sensor</span></code> — camera sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.image.html"><code class="docutils literal notranslate"><span class="pre">image</span></code> — machine vision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.tf.html"><code class="docutils literal notranslate"><span class="pre">tf</span></code> — Tensor Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.gif.html"><code class="docutils literal notranslate"><span class="pre">gif</span></code> — gif recording</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.mjpeg.html"><code class="docutils literal notranslate"><span class="pre">mjpeg</span></code> — mjpeg recording</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.audio.html"><code class="docutils literal notranslate"><span class="pre">audio</span></code> — Audio Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.micro_speech.html"><code class="docutils literal notranslate"><span class="pre">micro_speech</span></code> — Micro Speech Audio Module Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.lcd.html"><code class="docutils literal notranslate"><span class="pre">lcd</span></code> — lcd driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.fir.html"><code class="docutils literal notranslate"><span class="pre">fir</span></code> — thermal sensor driver (fir == far infrared)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.tv.html"><code class="docutils literal notranslate"><span class="pre">tv</span></code> — tv shield driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.cpufreq.html"><code class="docutils literal notranslate"><span class="pre">cpufreq</span></code> — CPU Frequency Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.buzzer.html"><code class="docutils literal notranslate"><span class="pre">buzzer</span></code> — buzzer driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.imu.html"><code class="docutils literal notranslate"><span class="pre">imu</span></code> — imu sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.rpc.html"><code class="docutils literal notranslate"><span class="pre">rpc</span></code> — rpc library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.rtsp.html"><code class="docutils literal notranslate"><span class="pre">rtsp</span></code> — rtsp library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.omv.html"><code class="docutils literal notranslate"><span class="pre">omv</span></code> — OpenMV Cam Information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#third-party-libraries-on-the-openmv-cam">Third-party libraries on the OpenMV Cam</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/reference/index.html">MicroPython language and implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/genrst/index.html">MicroPython differences from CPython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/license.html">MicroPython license information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/openmvcam/quickref.html">Quick reference for the openmvcam</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+<nav class="wy-nav-top" aria-label="top navigation">
+<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+<a href="https://docs.openmv.io/index.html">MicroPython</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div role="navigation" aria-label="breadcrumbs navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="https://docs.openmv.io/index.html">Docs</a> »</li>
+<li><a href="https://docs.openmv.io/library/index.html">MicroPython libraries</a> »</li>
+<li><a href="https://docs.openmv.io/library/pyb.html"><code class="docutils literal notranslate"><span class="pre">pyb</span></code> — functions related to the board</a> »</li>
+<li>class Servo – 3-wire hobby servo driver</li>
+<li class="wy-breadcrumbs-aside">
+<a href="https://docs.openmv.io/_sources/library/pyb.Servo.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr>
+</div>
+<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+<div itemprop="articleBody">
+<div class="section" id="class-servo-3-wire-hobby-servo-driver">
+<span id="pyb-servo"></span><h1>class Servo – 3-wire hobby servo driver<a class="headerlink" href="https://docs.openmv.io/library/pyb.Servo.html#class-servo-3-wire-hobby-servo-driver" title="Permalink to this headline">¶</a></h1>
+<p>Servo objects control standard hobby servo motors with 3-wires (ground, power,
+signal).</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyb</span>
+
+<span class="n">s1</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Servo</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># create a servo object on position P7</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Servo</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>   <span class="c1"># create a servo object on position P8</span>
+
+<span class="n">s1</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>        <span class="c1"># move servo 1 to 45 degrees</span>
+<span class="n">s2</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>         <span class="c1"># move servo 2 to 0 degrees</span>
+
+<span class="c1"># move servo1 and servo2 synchronously, taking 1500ms</span>
+<span class="n">s1</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="mi">1500</span><span class="p">)</span>
+<span class="n">s2</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1500</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Servo objects use Timer(5) to produce the PWM output. You can
+use Timer(5) for Servo control, or your own purposes, but not both at the
+same time.</p>
+</div>
+<div class="section" id="constructors">
+<h2>Constructors<a class="headerlink" href="https://docs.openmv.io/library/pyb.Servo.html#constructors" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyb.pyb.Servo">
+<em class="property">class </em><code class="descclassname">pyb.</code><code class="descname">Servo</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Servo.html#pyb.pyb.Servo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a servo object. <code class="docutils literal notranslate"><span class="pre">id</span></code> is 1-3, and corresponds to pins P7 through P9.</p>
+</dd></dl>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="https://docs.openmv.io/library/pyb.Servo.html#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="pyb.Servo.angle">
+<code class="descclassname">Servo.</code><code class="descname">angle</code><span class="sig-paren">(</span><span class="optional">[</span><em>angle</em>, <em>time=0</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Servo.html#pyb.Servo.angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>If no arguments are given, this function returns the current angle.</p>
+<p>If arguments are given, this function sets the angle of the servo:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">angle</span></code> is the angle to move to in degrees.</li>
+<li><code class="docutils literal notranslate"><span class="pre">time</span></code> is the number of milliseconds to take to get to the specified
+angle. If omitted, then the servo moves as quickly as possible to its
+new position.</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Servo.speed">
+<code class="descclassname">Servo.</code><code class="descname">speed</code><span class="sig-paren">(</span><span class="optional">[</span><em>speed</em>, <em>time=0</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Servo.html#pyb.Servo.speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>If no arguments are given, this function returns the current speed.</p>
+<p>If arguments are given, this function sets the speed of the servo:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">speed</span></code> is the speed to change to, between -100 and 100.</li>
+<li><code class="docutils literal notranslate"><span class="pre">time</span></code> is the number of milliseconds to take to get to the specified
+speed. If omitted, then the servo accelerates as quickly as possible.</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Servo.pulse_width">
+<code class="descclassname">Servo.</code><code class="descname">pulse_width</code><span class="sig-paren">(</span><span class="optional">[</span><em>value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Servo.html#pyb.Servo.pulse_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>If no arguments are given, this function returns the current raw pulse-width
+value.</p>
+<p>If an argument is given, this function sets the raw pulse-width value.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Servo.calibration">
+<code class="descclassname">Servo.</code><code class="descname">calibration</code><span class="sig-paren">(</span><span class="optional">[</span><em>pulse_min</em>, <em>pulse_max</em>, <em>pulse_centre</em><span class="optional">[</span>, <em>pulse_angle_90</em>, <em>pulse_speed_100</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Servo.html#pyb.Servo.calibration" title="Permalink to this definition">¶</a></dt>
+<dd><p>If no arguments are given, this function returns the current calibration
+data, as a 5-tuple.</p>
+<p>If arguments are given, this function sets the timing calibration:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">pulse_min</span></code> is the minimum allowed pulse width.</li>
+<li><code class="docutils literal notranslate"><span class="pre">pulse_max</span></code> is the maximum allowed pulse width.</li>
+<li><code class="docutils literal notranslate"><span class="pre">pulse_centre</span></code> is the pulse width corresponding to the centre/zero position.</li>
+<li><code class="docutils literal notranslate"><span class="pre">pulse_angle_90</span></code> is the pulse width corresponding to 90 degrees.</li>
+<li><code class="docutils literal notranslate"><span class="pre">pulse_speed_100</span></code> is the pulse width corresponding to a speed of 100.</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+<a href="https://docs.openmv.io/library/pyb.SPI.html" class="btn btn-neutral float-right" title="class SPI – a master-driven serial protocol" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+<a href="https://docs.openmv.io/library/pyb.RTC.html" class="btn btn-neutral float-left" title="class RTC – real time clock" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+</div>
+<hr>
+<div role="contentinfo">
+<p>
+© Copyright 2014-2021, Damien P. George, Paul Sokolovsky, OpenMV LLC, and contributors
+<span class="lastupdated">
+Last updated on 27 Jun 2021.
+</span>
+</p>
+</div>
+Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org/">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span class="fa fa-book"> Language and External Links</span>
+<span class="fa fa-caret-down"></span>
+</span>
+<div class="rst-other-versions">
+<dl>
+<dt>Language</dt>
+<dd>
+<a href="https://openmv.io/">English</a>
+</dd>
+<dd>
+<a href="http://doc.singtown.cc/">中文</a>
+</dd>
+</dl>
+<hr>
+<dl>
+<dt>External links</dt>
+<dd>
+<a href="https://openmv.io/">openmv.io</a>
+</dd>
+<dd>
+<a href="http://forums.openmv.io/">forums.openmv.io</a>
+</dd>
+<dd>
+<a href="https://github.com/openmv/openmv">github.com/openmv/openmv</a>
+</dd>
+<dd>
+<a href="http://micropython.org/">micropython.org</a>
+</dd>
+<dd>
+<a href="http://forum.micropython.org/">forum.micropython.org</a>
+</dd>
+<dd>
+<a href="https://github.com/micropython/micropython">github.com/micropython/micropython</a>
+</dd>
+</dl>
+</div>
+</div>
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body></html>
