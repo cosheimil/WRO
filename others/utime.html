@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://docs.openmv.io/library/utime.html#module-utime -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths" lang="en" data-darkreader-mode="dynamic" data-darkreader-scheme="dark" style=""><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style class="darkreader darkreader--fallback" media="screen"></style><style class="darkreader darkreader--text" media="screen"></style><style class="darkreader darkreader--invert" media="screen">.jfk-bubble.gtx-bubble, .captcheck_answer_label > input + img, span#closed_text > img[src^="https://www.gstatic.com/images/branding/googlelogo"], span[data-href^="https://www.hcaptcha.com/"] > #icon, #bit-notification-bar-iframe, ::-webkit-calendar-picker-indicator {
+    filter: invert(100%) hue-rotate(180deg) contrast(90%) !important;
+}</style><style class="darkreader darkreader--inline" media="screen">[data-darkreader-inline-bgcolor] {
+  background-color: var(--darkreader-inline-bgcolor) !important;
+}
+[data-darkreader-inline-bgimage] {
+  background-image: var(--darkreader-inline-bgimage) !important;
+}
+[data-darkreader-inline-border] {
+  border-color: var(--darkreader-inline-border) !important;
+}
+[data-darkreader-inline-border-bottom] {
+  border-bottom-color: var(--darkreader-inline-border-bottom) !important;
+}
+[data-darkreader-inline-border-left] {
+  border-left-color: var(--darkreader-inline-border-left) !important;
+}
+[data-darkreader-inline-border-right] {
+  border-right-color: var(--darkreader-inline-border-right) !important;
+}
+[data-darkreader-inline-border-top] {
+  border-top-color: var(--darkreader-inline-border-top) !important;
+}
+[data-darkreader-inline-boxshadow] {
+  box-shadow: var(--darkreader-inline-boxshadow) !important;
+}
+[data-darkreader-inline-color] {
+  color: var(--darkreader-inline-color) !important;
+}
+[data-darkreader-inline-fill] {
+  fill: var(--darkreader-inline-fill) !important;
+}
+[data-darkreader-inline-stroke] {
+  stroke: var(--darkreader-inline-stroke) !important;
+}
+[data-darkreader-inline-outline] {
+  outline-color: var(--darkreader-inline-outline) !important;
+}
+[data-darkreader-inline-stopcolor] {
+  stop-color: var(--darkreader-inline-stopcolor) !important;
+}</style><style class="darkreader darkreader--variables" media="screen">:root {
+   --darkreader-neutral-background: #131516;
+   --darkreader-neutral-text: #d8d4cf;
+   --darkreader-selection-background: #004daa;
+   --darkreader-selection-text: #e8e6e3;
+}</style><style class="darkreader darkreader--root-vars" media="screen"></style><style class="darkreader darkreader--user-agent" media="screen">html {
+    background-color: #181a1b !important;
+}
+html {
+    color-scheme: dark !important;
+}
+html, body {
+    background-color: #181a1b;
+}
+html, body {
+    border-color: #736b5e;
+    color: #e8e6e3;
+}
+a {
+    color: #3391ff;
+}
+table {
+    border-color: #545b5e;
+}
+::placeholder {
+    color: #b2aba1;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: #404400 !important;
+    color: #e8e6e3 !important;
+}
+::-webkit-scrollbar {
+    background-color: #202324;
+    color: #aba499;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #454a4d;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #575e62;
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: #484e51;
+}
+::-webkit-scrollbar-corner {
+    background-color: #181a1b;
+}
+::selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}
+::-moz-selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>utime – time related functions — MicroPython 1.15 documentation</title>
+<link rel="shortcut icon" href="https://docs.openmv.io/_static/openmv.ico">
+<script type="text/javascript" src="./utime – time related functions — MicroPython 1.15 documentation_files/modernizr.min.js"></script><meta name="darkreader" content="6cd2f05256ac49bc989f8f3bfb813c9d"><style class="darkreader darkreader--override" media="screen">.vimvixen-hint {
+    background-color: #7b5300 !important;
+    border-color: #d8b013 !important;
+    color: #f3e8c8 !important;
+}
+::placeholder {
+    opacity: 0.5 !important;
+}
+#edge-translate-panel-body,
+.MuiTypography-body1 {
+    color: var(--darkreader-neutral-text) !important;
+}
+gr-main-header {
+    background-color: #0f3a48 !important;
+}
+embed[type="application/pdf"][src="about:blank"] { filter: invert(100%) contrast(90%); }</style>
+<script type="text/javascript" id="documentation_options" data-url_root="../" src="./utime – time related functions — MicroPython 1.15 documentation_files/documentation_options.js"></script>
+<script type="text/javascript" src="./utime – time related functions — MicroPython 1.15 documentation_files/jquery.js"></script>
+<script type="text/javascript" src="./utime – time related functions — MicroPython 1.15 documentation_files/underscore.js"></script>
+<script type="text/javascript" src="./utime – time related functions — MicroPython 1.15 documentation_files/doctools.js"></script>
+<script type="text/javascript" src="./utime – time related functions — MicroPython 1.15 documentation_files/language_data.js"></script>
+<script type="text/javascript" src="./utime – time related functions — MicroPython 1.15 documentation_files/theme.js"></script>
+<link rel="stylesheet" href="./utime – time related functions — MicroPython 1.15 documentation_files/theme.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="stylesheet" href="./utime – time related functions — MicroPython 1.15 documentation_files/pygments.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="stylesheet" href="./utime – time related functions — MicroPython 1.15 documentation_files/customstyle.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="index" title="Index" href="https://docs.openmv.io/genindex.html">
+<link rel="search" title="Search" href="https://docs.openmv.io/search.html">
+<link rel="next" title="uzlib – zlib decompression" href="https://docs.openmv.io/library/uzlib.html">
+<link rel="prev" title="usys – system specific functions" href="https://docs.openmv.io/library/usys.html">
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav data-toggle="wy-nav-shift" class="wy-nav-side">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a href="https://docs.openmv.io/index.html" class="icon icon-home"> MicroPython
+<img src="./utime – time related functions — MicroPython 1.15 documentation_files/web-logo-sticky.png" class="logo" alt="Logo">
+</a>
+<div class="version">
+1.15
+</div>
+<div role="search">
+<form id="rtd-search-form" class="wy-form" action="https://docs.openmv.io/search.html" method="get">
+<input type="text" name="q" placeholder="Search docs">
+<input type="hidden" name="check_keywords" value="yes">
+<input type="hidden" name="area" value="default">
+</form>
+</div>
+</div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="https://docs.openmv.io/library/index.html"><span class="toctree-expand"></span>MicroPython libraries</a><ul class="">
+<li class="toctree-l2 current"><a class="reference internal" href="https://docs.openmv.io/library/index.html#python-standard-libraries-and-micro-libraries"><span class="toctree-expand"></span>Python standard libraries and micro-libraries</a><ul class="">
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/builtins.html">Builtin functions and exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/cmath.html"><code class="docutils literal notranslate"><span class="pre">cmath</span></code> – mathematical functions for complex numbers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/gc.html"><code class="docutils literal notranslate"><span class="pre">gc</span></code> – control the garbage collector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/math.html"><code class="docutils literal notranslate"><span class="pre">math</span></code> – mathematical functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uarray.html"><code class="docutils literal notranslate"><span class="pre">uarray</span></code> – arrays of numeric data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uasyncio.html"><code class="docutils literal notranslate"><span class="pre">uasyncio</span></code> — asynchronous I/O scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/ubinascii.html"><code class="docutils literal notranslate"><span class="pre">ubinascii</span></code> – binary/ASCII conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/ucollections.html"><code class="docutils literal notranslate"><span class="pre">ucollections</span></code> – collection and container types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uerrno.html"><code class="docutils literal notranslate"><span class="pre">uerrno</span></code> – system error codes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uhashlib.html"><code class="docutils literal notranslate"><span class="pre">uhashlib</span></code> – hashing algorithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uheapq.html"><code class="docutils literal notranslate"><span class="pre">uheapq</span></code> – heap queue algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uio.html"><code class="docutils literal notranslate"><span class="pre">uio</span></code> – input/output streams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/ujson.html"><code class="docutils literal notranslate"><span class="pre">ujson</span></code> – JSON encoding and decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uos.html"><code class="docutils literal notranslate"><span class="pre">uos</span></code> – basic “operating system” services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/ure.html"><code class="docutils literal notranslate"><span class="pre">ure</span></code> – simple regular expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uselect.html"><code class="docutils literal notranslate"><span class="pre">uselect</span></code> – wait for events on a set of streams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/usocket.html"><code class="docutils literal notranslate"><span class="pre">usocket</span></code> – socket module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/ussl.html"><code class="docutils literal notranslate"><span class="pre">ussl</span></code> – SSL/TLS module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/ustruct.html"><code class="docutils literal notranslate"><span class="pre">ustruct</span></code> – pack and unpack primitive data types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/usys.html"><code class="docutils literal notranslate"><span class="pre">usys</span></code> – system specific functions</a></li>
+<li class="toctree-l3 current"><a class="reference internal current" href="https://docs.openmv.io/library/utime.html#"><span class="toctree-expand"></span><code class="docutils literal notranslate"><span class="pre">utime</span></code> – time related functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/utime.html#functions">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/uzlib.html"><code class="docutils literal notranslate"><span class="pre">uzlib</span></code> – zlib decompression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/_thread.html"><code class="docutils literal notranslate"><span class="pre">_thread</span></code> – multithreading support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#micropython-specific-libraries">MicroPython-specific libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#libraries-specific-to-the-openmv-cam">Libraries specific to the OpenMV Cam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#third-party-libraries-on-the-openmv-cam">Third-party libraries on the OpenMV Cam</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/reference/index.html">MicroPython language and implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/genrst/index.html">MicroPython differences from CPython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/license.html">MicroPython license information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/openmvcam/quickref.html">Quick reference for the openmvcam</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+<nav class="wy-nav-top" aria-label="top navigation">
+<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+<a href="https://docs.openmv.io/index.html">MicroPython</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div role="navigation" aria-label="breadcrumbs navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="https://docs.openmv.io/index.html">Docs</a> »</li>
+<li><a href="https://docs.openmv.io/library/index.html">MicroPython libraries</a> »</li>
+<li><code class="docutils literal notranslate"><span class="pre">utime</span></code> – time related functions</li>
+<li class="wy-breadcrumbs-aside">
+<a href="https://docs.openmv.io/_sources/library/utime.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr>
+</div>
+<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+<div itemprop="articleBody">
+<div class="section" id="module-utime">
+<span id="utime-time-related-functions"></span><h1><a class="reference internal" href="https://docs.openmv.io/library/utime.html#module-utime" title="utime: time related functions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">utime</span></code></a> – time related functions<a class="headerlink" href="https://docs.openmv.io/library/utime.html#module-utime" title="Permalink to this headline">¶</a></h1>
+<p><em>This module implements a subset of the corresponding</em> <a class="reference internal" href="https://docs.openmv.io/reference/glossary.html#term-cpython"><span class="xref std std-term">CPython</span></a> <em>module,
+as described below. For more information, refer to the original
+CPython documentation:</em> <a class="reference external" href="https://docs.python.org/3.5/library/time.html#module-time" title="(in Python v3.5)"><code class="docutils literal notranslate"><span class="pre">time</span></code></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">utime</span></code> module provides functions for getting the current time and date,
+measuring time intervals, and for delays.</p>
+<p><strong>Time Epoch</strong>: Unix port uses standard for POSIX systems epoch of
+1970-01-01 00:00:00 UTC. However, embedded ports use epoch of
+2000-01-01 00:00:00 UTC.</p>
+<p><strong>Maintaining actual calendar date/time</strong>: This requires a
+Real Time Clock (RTC). On systems with underlying OS (including some
+RTOS), an RTC may be implicit. Setting and maintaining actual calendar
+time is responsibility of OS/RTOS and is done outside of MicroPython,
+it just uses OS API to query date/time. On baremetal ports however
+system time depends on <code class="docutils literal notranslate"><span class="pre">machine.RTC()</span></code> object. The current calendar time
+may be set using <code class="docutils literal notranslate"><span class="pre">machine.RTC().datetime(tuple)</span></code> function, and maintained
+by following means:</p>
+<ul class="simple">
+<li>By a backup battery (which may be an additional, optional component for
+a particular board).</li>
+<li>Using networked time protocol (requires setup by a port/user).</li>
+<li>Set manually by a user on each power-up (many boards then maintain
+RTC time across hard resets, though some may require setting it again
+in such case).</li>
+</ul>
+<p>If actual calendar time is not maintained with a system/MicroPython RTC,
+functions below which require reference to current absolute time may
+behave not as expected.</p>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="https://docs.openmv.io/library/utime.html#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="utime.gmtime">
+<code class="descclassname">utime.</code><code class="descname">gmtime</code><span class="sig-paren">(</span><span class="optional">[</span><em>secs</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.gmtime" title="Permalink to this definition">¶</a></dt>
+<dt id="utime.localtime">
+<code class="descclassname">utime.</code><code class="descname">localtime</code><span class="sig-paren">(</span><span class="optional">[</span><em>secs</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.localtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the time <em>secs</em> expressed in seconds since the Epoch (see above) into an
+8-tuple which contains: <code class="docutils literal notranslate"><span class="pre">(year,</span> <span class="pre">month,</span> <span class="pre">mday,</span> <span class="pre">hour,</span> <span class="pre">minute,</span> <span class="pre">second,</span> <span class="pre">weekday,</span> <span class="pre">yearday)</span></code>
+If <em>secs</em> is not provided or None, then the current time from the RTC is used.</p>
+<p>The <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.gmtime" title="utime.gmtime"><code class="xref any py py-func docutils literal notranslate"><span class="pre">gmtime()</span></code></a> function returns a date-time tuple in UTC, and <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.localtime" title="utime.localtime"><code class="xref any py py-func docutils literal notranslate"><span class="pre">localtime()</span></code></a> returns a
+date-time tuple in local time.</p>
+<p>The format of the entries in the 8-tuple are:</p>
+<ul class="simple">
+<li>year includes the century (for example 2014).</li>
+<li>month is 1-12</li>
+<li>mday is 1-31</li>
+<li>hour is 0-23</li>
+<li>minute is 0-59</li>
+<li>second is 0-59</li>
+<li>weekday is 0-6 for Mon-Sun</li>
+<li>yearday is 1-366</li>
+</ul>
+</dd></dl>
+<dl class="function">
+<dt id="utime.mktime">
+<code class="descclassname">utime.</code><code class="descname">mktime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.mktime" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is inverse function of localtime. It’s argument is a full 8-tuple
+which expresses a time as per localtime. It returns an integer which is
+the number of seconds since Jan 1, 2000.</p>
+</dd></dl>
+<dl class="function">
+<dt id="utime.sleep">
+<code class="descclassname">utime.</code><code class="descname">sleep</code><span class="sig-paren">(</span><em>seconds</em><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.sleep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sleep for the given number of seconds. Some boards may accept <em>seconds</em> as a
+floating-point number to sleep for a fractional number of seconds. Note that
+other boards may not accept a floating-point argument, for compatibility with
+them use <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.sleep_ms" title="utime.sleep_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sleep_ms()</span></code></a> and <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.sleep_us" title="utime.sleep_us"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sleep_us()</span></code></a> functions.</p>
+</dd></dl>
+<dl class="function">
+<dt id="utime.sleep_ms">
+<code class="descclassname">utime.</code><code class="descname">sleep_ms</code><span class="sig-paren">(</span><em>ms</em><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.sleep_ms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delay for given number of milliseconds, should be positive or 0.</p>
+</dd></dl>
+<dl class="function">
+<dt id="utime.sleep_us">
+<code class="descclassname">utime.</code><code class="descname">sleep_us</code><span class="sig-paren">(</span><em>us</em><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.sleep_us" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delay for given number of microseconds, should be positive or 0.</p>
+</dd></dl>
+<dl class="function">
+<dt id="utime.ticks_ms">
+<code class="descclassname">utime.</code><code class="descname">ticks_ms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an increasing millisecond counter with an arbitrary reference point, that
+wraps around after some value.</p>
+<p>The wrap-around value is not explicitly exposed, but we will
+refer to it as <em>TICKS_MAX</em> to simplify discussion. Period of the values is
+<em>TICKS_PERIOD = TICKS_MAX + 1</em>. <em>TICKS_PERIOD</em> is guaranteed to be a power of
+two, but otherwise may differ from port to port. The same period value is used
+for all of <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="utime.ticks_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_ms()</span></code></a>, <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_us" title="utime.ticks_us"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_us()</span></code></a>, <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_cpu" title="utime.ticks_cpu"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_cpu()</span></code></a> functions (for
+simplicity). Thus, these functions will return a value in range [<em>0</em> ..
+<em>TICKS_MAX</em>], inclusive, total <em>TICKS_PERIOD</em> values. Note that only
+non-negative values are used. For the most part, you should treat values returned
+by these functions as opaque. The only operations available for them are
+<a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="utime.ticks_diff"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_diff()</span></code></a> and <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_add" title="utime.ticks_add"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_add()</span></code></a> functions described below.</p>
+<p>Note: Performing standard mathematical operations (+, -) or relational
+operators (&lt;, &lt;=, &gt;, &gt;=) directly on these value will lead to invalid
+result. Performing mathematical operations and then passing their results
+as arguments to <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="utime.ticks_diff"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_diff()</span></code></a> or <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_add" title="utime.ticks_add"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_add()</span></code></a> will also lead to
+invalid results from the latter functions.</p>
+</dd></dl>
+<dl class="function">
+<dt id="utime.ticks_us">
+<code class="descclassname">utime.</code><code class="descname">ticks_us</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.ticks_us" title="Permalink to this definition">¶</a></dt>
+<dd><p>Just like <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="utime.ticks_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_ms()</span></code></a> above, but in microseconds.</p>
+</dd></dl>
+<dl class="function">
+<dt id="utime.ticks_cpu">
+<code class="descclassname">utime.</code><code class="descname">ticks_cpu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.ticks_cpu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="utime.ticks_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_ms()</span></code></a> and <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_us" title="utime.ticks_us"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_us()</span></code></a>, but with the highest possible resolution
+in the system. This is usually CPU clocks, and that’s why the function is named that
+way. But it doesn’t have to be a CPU clock, some other timing source available in a
+system (e.g. high-resolution timer) can be used instead. The exact timing unit
+(resolution) of this function is not specified on <code class="docutils literal notranslate"><span class="pre">utime</span></code> module level, but
+documentation for a specific port may provide more specific information. This
+function is intended for very fine benchmarking or very tight real-time loops.
+Avoid using it in portable code.</p>
+<p>Availability: Not every port implements this function.</p>
+</dd></dl>
+<dl class="function">
+<dt id="utime.ticks_add">
+<code class="descclassname">utime.</code><code class="descname">ticks_add</code><span class="sig-paren">(</span><em>ticks</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.ticks_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset ticks value by a given number, which can be either positive or negative.
+Given a <em>ticks</em> value, this function allows to calculate ticks value <em>delta</em>
+ticks before or after it, following modular-arithmetic definition of tick values
+(see <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="utime.ticks_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_ms()</span></code></a> above). <em>ticks</em> parameter must be a direct result of call
+to <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="utime.ticks_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_ms()</span></code></a>, <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_us" title="utime.ticks_us"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_us()</span></code></a>, or <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_cpu" title="utime.ticks_cpu"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_cpu()</span></code></a> functions (or from previous
+call to <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_add" title="utime.ticks_add"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_add()</span></code></a>). However, <em>delta</em> can be an arbitrary integer number
+or numeric expression. <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_add" title="utime.ticks_add"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_add()</span></code></a> is useful for calculating deadlines for
+events/tasks. (Note: you must use <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="utime.ticks_diff"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_diff()</span></code></a> function to work with
+deadlines.)</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find out what ticks value there was 100ms ago</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ticks_add</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">ticks_ms</span><span class="p">(),</span> <span class="o">-</span><span class="mi">100</span><span class="p">))</span>
+
+<span class="c1"># Calculate deadline for operation and test for it</span>
+<span class="n">deadline</span> <span class="o">=</span> <span class="n">ticks_add</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">ticks_ms</span><span class="p">(),</span> <span class="mi">200</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">ticks_diff</span><span class="p">(</span><span class="n">deadline</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_ms</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">do_a_little_of_something</span><span class="p">()</span>
+
+<span class="c1"># Find out TICKS_MAX used by this port</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ticks_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+<dl class="function">
+<dt id="utime.ticks_diff">
+<code class="descclassname">utime.</code><code class="descname">ticks_diff</code><span class="sig-paren">(</span><em>ticks1</em>, <em>ticks2</em><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Measure ticks difference between values returned from <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="utime.ticks_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_ms()</span></code></a>, <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_us" title="utime.ticks_us"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_us()</span></code></a>,
+or <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_cpu" title="utime.ticks_cpu"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_cpu()</span></code></a> functions, as a signed value which may wrap around.</p>
+<p>The argument order is the same as for subtraction
+operator, <code class="docutils literal notranslate"><span class="pre">ticks_diff(ticks1,</span> <span class="pre">ticks2)</span></code> has the same meaning as <code class="docutils literal notranslate"><span class="pre">ticks1</span> <span class="pre">-</span> <span class="pre">ticks2</span></code>.
+However, values returned by <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="utime.ticks_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_ms()</span></code></a>, etc. functions may wrap around, so
+directly using subtraction on them will produce incorrect result. That is why
+<a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="utime.ticks_diff"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_diff()</span></code></a> is needed, it implements modular (or more specifically, ring)
+arithmetics to produce correct result even for wrap-around values (as long as they not
+too distant inbetween, see below). The function returns <strong>signed</strong> value in the range
+[<em>-TICKS_PERIOD/2</em> .. <em>TICKS_PERIOD/2-1</em>] (that’s a typical range definition for
+two’s-complement signed binary integers). If the result is negative, it means that
+<em>ticks1</em> occurred earlier in time than <em>ticks2</em>. Otherwise, it means that
+<em>ticks1</em> occurred after <em>ticks2</em>. This holds <strong>only</strong> if <em>ticks1</em> and <em>ticks2</em>
+are apart from each other for no more than <em>TICKS_PERIOD/2-1</em> ticks. If that does
+not hold, incorrect result will be returned. Specifically, if two tick values are
+apart for <em>TICKS_PERIOD/2-1</em> ticks, that value will be returned by the function.
+However, if <em>TICKS_PERIOD/2</em> of real-time ticks has passed between them, the
+function will return <em>-TICKS_PERIOD/2</em> instead, i.e. result value will wrap around
+to the negative range of possible values.</p>
+<p>Informal rationale of the constraints above: Suppose you are locked in a room with no
+means to monitor passing of time except a standard 12-notch clock. Then if you look at
+dial-plate now, and don’t look again for another 13 hours (e.g., if you fall for a
+long sleep), then once you finally look again, it may seem to you that only 1 hour
+has passed. To avoid this mistake, just look at the clock regularly. Your application
+should do the same. “Too long sleep” metaphor also maps directly to application
+behavior: don’t let your application run any single task for too long. Run tasks
+in steps, and do time-keeping inbetween.</p>
+<p><a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="utime.ticks_diff"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_diff()</span></code></a> is designed to accommodate various usage patterns, among them:</p>
+<ul>
+<li><p class="first">Polling with timeout. In this case, the order of events is known, and you will deal
+only with positive results of <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="utime.ticks_diff"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_diff()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wait for GPIO pin to be asserted, but at most 500us</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_diff</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">(),</span> <span class="n">start</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TimeoutError</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Scheduling events. In this case, <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="utime.ticks_diff"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_diff()</span></code></a> result may be negative
+if an event is overdue:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># This code snippet is not optimized</span>
+<span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_ms</span><span class="p">()</span>
+<span class="n">scheduled_time</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">scheduled_time</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">ticks_diff</span><span class="p">(</span><span class="n">scheduled_time</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Too early, let's nap"</span><span class="p">)</span>
+    <span class="n">sleep_ms</span><span class="p">(</span><span class="n">ticks_diff</span><span class="p">(</span><span class="n">scheduled_time</span><span class="p">,</span> <span class="n">now</span><span class="p">))</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="k">elif</span> <span class="n">ticks_diff</span><span class="p">(</span><span class="n">scheduled_time</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Right at time!"</span><span class="p">)</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="k">elif</span> <span class="n">ticks_diff</span><span class="p">(</span><span class="n">scheduled_time</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Oops, running late, tell task to run faster!"</span><span class="p">)</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run_faster</span><span class="o">=</span><span class="n">true</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Note: Do not pass <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.time" title="utime.time"><code class="xref any py py-func docutils literal notranslate"><span class="pre">time()</span></code></a> values to <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_diff" title="utime.ticks_diff"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_diff()</span></code></a>, you should use
+normal mathematical operations on them. But note that <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.time" title="utime.time"><code class="xref any py py-func docutils literal notranslate"><span class="pre">time()</span></code></a> may (and will)
+also overflow. This is known as <a class="reference external" href="https://en.wikipedia.org/wiki/Year_2038_problem">https://en.wikipedia.org/wiki/Year_2038_problem</a> .</p>
+</dd></dl>
+<dl class="function">
+<dt id="utime.time">
+<code class="descclassname">utime.</code><code class="descname">time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of seconds, as an integer, since the Epoch, assuming that
+underlying RTC is set and maintained as described above. If an RTC is not set, this
+function returns number of seconds since a port-specific reference point in time (for
+embedded boards without a battery-backed RTC, usually since power up or reset). If you
+want to develop portable MicroPython application, you should not rely on this function
+to provide higher than second precision. If you need higher precision, absolute
+timestamps, use <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.time_ns" title="utime.time_ns"><code class="xref any py py-func docutils literal notranslate"><span class="pre">time_ns()</span></code></a>. If relative times are acceptable then use the
+<a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_ms" title="utime.ticks_ms"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_ms()</span></code></a> and <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.ticks_us" title="utime.ticks_us"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ticks_us()</span></code></a> functions. If you need calendar time, <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.gmtime" title="utime.gmtime"><code class="xref any py py-func docutils literal notranslate"><span class="pre">gmtime()</span></code></a> or
+<a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.localtime" title="utime.localtime"><code class="xref any py py-func docutils literal notranslate"><span class="pre">localtime()</span></code></a> without an argument is a better choice.</p>
+<div class="attention admonition">
+<p class="first admonition-title">Difference to CPython</p>
+<p class="last">In CPython, this function returns number of
+seconds since Unix epoch, 1970-01-01 00:00 UTC, as a floating-point,
+usually having microsecond precision. With MicroPython, only Unix port
+uses the same Epoch, and if floating-point precision allows,
+returns sub-second precision. Embedded hardware usually doesn’t have
+floating-point precision to represent both long time ranges and subsecond
+precision, so they use integer value with second precision. Some embedded
+hardware also lacks battery-powered RTC, so returns number of seconds
+since last power-up or from other relative, hardware-specific point
+(e.g. reset).</p>
+</div>
+</dd></dl>
+<dl class="function">
+<dt id="utime.time_ns">
+<code class="descclassname">utime.</code><code class="descname">time_ns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/utime.html#utime.time_ns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <a class="reference internal" href="https://docs.openmv.io/library/utime.html#utime.time" title="utime.time"><code class="xref any py py-func docutils literal notranslate"><span class="pre">time()</span></code></a> but returns nanoseconds since the Epoch, as an integer (usually
+a big integer, so will allocate on the heap).</p>
+</dd></dl>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+<a href="https://docs.openmv.io/library/uzlib.html" class="btn btn-neutral float-right" title="uzlib – zlib decompression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+<a href="https://docs.openmv.io/library/usys.html" class="btn btn-neutral float-left" title="usys – system specific functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+</div>
+<hr>
+<div role="contentinfo">
+<p>
+© Copyright 2014-2021, Damien P. George, Paul Sokolovsky, OpenMV LLC, and contributors
+<span class="lastupdated">
+Last updated on 27 Jun 2021.
+</span>
+</p>
+</div>
+Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org/">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span class="fa fa-book"> Language and External Links</span>
+<span class="fa fa-caret-down"></span>
+</span>
+<div class="rst-other-versions">
+<dl>
+<dt>Language</dt>
+<dd>
+<a href="https://openmv.io/">English</a>
+</dd>
+<dd>
+<a href="http://doc.singtown.cc/">中文</a>
+</dd>
+</dl>
+<hr>
+<dl>
+<dt>External links</dt>
+<dd>
+<a href="https://openmv.io/">openmv.io</a>
+</dd>
+<dd>
+<a href="http://forums.openmv.io/">forums.openmv.io</a>
+</dd>
+<dd>
+<a href="https://github.com/openmv/openmv">github.com/openmv/openmv</a>
+</dd>
+<dd>
+<a href="http://micropython.org/">micropython.org</a>
+</dd>
+<dd>
+<a href="http://forum.micropython.org/">forum.micropython.org</a>
+</dd>
+<dd>
+<a href="https://github.com/micropython/micropython">github.com/micropython/micropython</a>
+</dd>
+</dl>
+</div>
+</div>
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body></html>
