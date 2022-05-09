@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)https://docs.openmv.io/library/pyb.Pin.html -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths" lang="en" style="" data-darkreader-mode="dynamic" data-darkreader-scheme="dark"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style class="darkreader darkreader--fallback" media="screen"></style><style class="darkreader darkreader--text" media="screen"></style><style class="darkreader darkreader--invert" media="screen">.jfk-bubble.gtx-bubble, .captcheck_answer_label > input + img, span#closed_text > img[src^="https://www.gstatic.com/images/branding/googlelogo"], span[data-href^="https://www.hcaptcha.com/"] > #icon, #bit-notification-bar-iframe, ::-webkit-calendar-picker-indicator {
+    filter: invert(100%) hue-rotate(180deg) contrast(90%) !important;
+}</style><style class="darkreader darkreader--inline" media="screen">[data-darkreader-inline-bgcolor] {
+  background-color: var(--darkreader-inline-bgcolor) !important;
+}
+[data-darkreader-inline-bgimage] {
+  background-image: var(--darkreader-inline-bgimage) !important;
+}
+[data-darkreader-inline-border] {
+  border-color: var(--darkreader-inline-border) !important;
+}
+[data-darkreader-inline-border-bottom] {
+  border-bottom-color: var(--darkreader-inline-border-bottom) !important;
+}
+[data-darkreader-inline-border-left] {
+  border-left-color: var(--darkreader-inline-border-left) !important;
+}
+[data-darkreader-inline-border-right] {
+  border-right-color: var(--darkreader-inline-border-right) !important;
+}
+[data-darkreader-inline-border-top] {
+  border-top-color: var(--darkreader-inline-border-top) !important;
+}
+[data-darkreader-inline-boxshadow] {
+  box-shadow: var(--darkreader-inline-boxshadow) !important;
+}
+[data-darkreader-inline-color] {
+  color: var(--darkreader-inline-color) !important;
+}
+[data-darkreader-inline-fill] {
+  fill: var(--darkreader-inline-fill) !important;
+}
+[data-darkreader-inline-stroke] {
+  stroke: var(--darkreader-inline-stroke) !important;
+}
+[data-darkreader-inline-outline] {
+  outline-color: var(--darkreader-inline-outline) !important;
+}
+[data-darkreader-inline-stopcolor] {
+  stop-color: var(--darkreader-inline-stopcolor) !important;
+}</style><style class="darkreader darkreader--variables" media="screen">:root {
+   --darkreader-neutral-background: #131516;
+   --darkreader-neutral-text: #d8d4cf;
+   --darkreader-selection-background: #004daa;
+   --darkreader-selection-text: #e8e6e3;
+}</style><style class="darkreader darkreader--root-vars" media="screen"></style><style class="darkreader darkreader--user-agent" media="screen">html {
+    background-color: #181a1b !important;
+}
+html {
+    color-scheme: dark !important;
+}
+html, body {
+    background-color: #181a1b;
+}
+html, body {
+    border-color: #736b5e;
+    color: #e8e6e3;
+}
+a {
+    color: #3391ff;
+}
+table {
+    border-color: #545b5e;
+}
+::placeholder {
+    color: #b2aba1;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: #404400 !important;
+    color: #e8e6e3 !important;
+}
+::-webkit-scrollbar {
+    background-color: #202324;
+    color: #aba499;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #454a4d;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #575e62;
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: #484e51;
+}
+::-webkit-scrollbar-corner {
+    background-color: #181a1b;
+}
+::selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}
+::-moz-selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>class Pin – control I/O pins — MicroPython 1.15 documentation</title>
+<link rel="shortcut icon" href="https://docs.openmv.io/_static/openmv.ico">
+<script type="text/javascript" src="./pin_files/modernizr.min.js"></script><meta name="darkreader" content="99c63abc97e24ca0b7ecdee0986331d4"><style class="darkreader darkreader--override" media="screen">.vimvixen-hint {
+    background-color: #7b5300 !important;
+    border-color: #d8b013 !important;
+    color: #f3e8c8 !important;
+}
+::placeholder {
+    opacity: 0.5 !important;
+}
+#edge-translate-panel-body,
+.MuiTypography-body1 {
+    color: var(--darkreader-neutral-text) !important;
+}
+gr-main-header {
+    background-color: #0f3a48 !important;
+}
+embed[type="application/pdf"][src="about:blank"] { filter: invert(100%) contrast(90%); }</style>
+<script type="text/javascript" id="documentation_options" data-url_root="../" src="./pin_files/documentation_options.js"></script>
+<script type="text/javascript" src="./pin_files/jquery.js"></script>
+<script type="text/javascript" src="./pin_files/underscore.js"></script>
+<script type="text/javascript" src="./pin_files/doctools.js"></script>
+<script type="text/javascript" src="./pin_files/language_data.js"></script>
+<script type="text/javascript" src="./pin_files/theme.js"></script>
+<link rel="stylesheet" href="./pin_files/theme.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="stylesheet" href="./pin_files/pygments.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="stylesheet" href="./pin_files/customstyle.css" type="text/css"><style class="darkreader darkreader--sync" media="screen"></style>
+<link rel="index" title="Index" href="https://docs.openmv.io/genindex.html">
+<link rel="search" title="Search" href="https://docs.openmv.io/search.html">
+<link rel="next" title="class RTC – real time clock" href="https://docs.openmv.io/library/pyb.RTC.html">
+<link rel="prev" title="class LED – LED object" href="https://docs.openmv.io/library/pyb.LED.html">
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav data-toggle="wy-nav-shift" class="wy-nav-side">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a href="https://docs.openmv.io/index.html" class="icon icon-home"> MicroPython
+<img src="./pin_files/web-logo-sticky.png" class="logo" alt="Logo">
+</a>
+<div class="version">
+1.15
+</div>
+<div role="search">
+<form id="rtd-search-form" class="wy-form" action="https://docs.openmv.io/search.html" method="get">
+<input type="text" name="q" placeholder="Search docs">
+<input type="hidden" name="check_keywords" value="yes">
+<input type="hidden" name="area" value="default">
+</form>
+</div>
+</div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="https://docs.openmv.io/library/index.html"><span class="toctree-expand"></span>MicroPython libraries</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#python-standard-libraries-and-micro-libraries">Python standard libraries and micro-libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#micropython-specific-libraries">MicroPython-specific libraries</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="https://docs.openmv.io/library/index.html#libraries-specific-to-the-openmv-cam"><span class="toctree-expand"></span>Libraries specific to the OpenMV Cam</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html"><span class="toctree-expand"></span><code class="docutils literal notranslate"><span class="pre">pyb</span></code> — functions related to the board</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#time-related-functions">Time related functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#reset-related-functions">Reset related functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#interrupt-related-functions">Interrupt related functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#power-related-functions">Power related functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#miscellaneous-functions">Miscellaneous functions</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="https://docs.openmv.io/library/pyb.html#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.sensor.html"><code class="docutils literal notranslate"><span class="pre">sensor</span></code> — camera sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.image.html"><code class="docutils literal notranslate"><span class="pre">image</span></code> — machine vision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.tf.html"><code class="docutils literal notranslate"><span class="pre">tf</span></code> — Tensor Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.gif.html"><code class="docutils literal notranslate"><span class="pre">gif</span></code> — gif recording</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.mjpeg.html"><code class="docutils literal notranslate"><span class="pre">mjpeg</span></code> — mjpeg recording</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.audio.html"><code class="docutils literal notranslate"><span class="pre">audio</span></code> — Audio Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.micro_speech.html"><code class="docutils literal notranslate"><span class="pre">micro_speech</span></code> — Micro Speech Audio Module Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.lcd.html"><code class="docutils literal notranslate"><span class="pre">lcd</span></code> — lcd driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.fir.html"><code class="docutils literal notranslate"><span class="pre">fir</span></code> — thermal sensor driver (fir == far infrared)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.tv.html"><code class="docutils literal notranslate"><span class="pre">tv</span></code> — tv shield driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.cpufreq.html"><code class="docutils literal notranslate"><span class="pre">cpufreq</span></code> — CPU Frequency Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.buzzer.html"><code class="docutils literal notranslate"><span class="pre">buzzer</span></code> — buzzer driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.imu.html"><code class="docutils literal notranslate"><span class="pre">imu</span></code> — imu sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.rpc.html"><code class="docutils literal notranslate"><span class="pre">rpc</span></code> — rpc library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.rtsp.html"><code class="docutils literal notranslate"><span class="pre">rtsp</span></code> — rtsp library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://docs.openmv.io/library/omv.omv.html"><code class="docutils literal notranslate"><span class="pre">omv</span></code> — OpenMV Cam Information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://docs.openmv.io/library/index.html#third-party-libraries-on-the-openmv-cam">Third-party libraries on the OpenMV Cam</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/reference/index.html">MicroPython language and implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/genrst/index.html">MicroPython differences from CPython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/license.html">MicroPython license information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://docs.openmv.io/openmvcam/quickref.html">Quick reference for the openmvcam</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+<nav class="wy-nav-top" aria-label="top navigation">
+
+<i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+<a href="https://docs.openmv.io/index.html">MicroPython</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div role="navigation" aria-label="breadcrumbs navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="https://docs.openmv.io/index.html">Docs</a> »</li>
+<li><a href="https://docs.openmv.io/library/index.html">MicroPython libraries</a> »</li>
+<li><a href="https://docs.openmv.io/library/pyb.html"><code class="docutils literal notranslate"><span class="pre">pyb</span></code> — functions related to the board</a> »</li>
+<li>class Pin – control I/O pins</li>
+<li class="wy-breadcrumbs-aside">
+<a href="https://docs.openmv.io/_sources/library/pyb.Pin.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr>
+</div>
+<div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+<div itemprop="articleBody">
+<div class="section" id="class-pin-control-i-o-pins">
+<span id="pyb-pin"></span><h1>class Pin – control I/O pins<a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#class-pin-control-i-o-pins" title="Permalink to this headline">¶</a></h1>
+<p>A pin is the basic object to control I/O pins. It has methods to set
+the mode of the pin (input, output, etc) and methods to get and set the
+digital logic level. For analog control of a pin, see the ADC class.</p>
+<p>Usage Model:</p>
+<p>All Board Pins are predefined as pyb.Pin.board.Name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p0_pin</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">P0</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">P0</span><span class="p">,</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>CPU pins which correspond to the board pins are available
+as <code class="docutils literal notranslate"><span class="pre">pyb.Pin.cpu.Name</span></code>. For the CPU pins, the names are the port letter
+followed by the pin number. On the OpenMV Cam, <code class="docutils literal notranslate"><span class="pre">pyb.Pin.board.P0</span></code> and
+<code class="docutils literal notranslate"><span class="pre">pyb.Pin.cpu.PB15</span></code> are the same pin.</p>
+<p>You can also use strings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="s1">'P0'</span><span class="p">,</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT_PP</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Users can add their own names:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MyMapperDict</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">'LeftMotorDir'</span> <span class="p">:</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">PB15</span> <span class="p">}</span>
+<span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="n">MyMapperDict</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="s2">"LeftMotorDir"</span><span class="p">,</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT_OD</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and can query mappings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pin</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="s2">"LeftMotorDir"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Users can also add their own mapping function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">MyMapper</span><span class="p">(</span><span class="n">pin_name</span><span class="p">):</span>
+   <span class="k">if</span> <span class="n">pin_name</span> <span class="o">==</span> <span class="s2">"LeftMotorDir"</span><span class="p">:</span>
+       <span class="k">return</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">PB15</span>
+
+<span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">mapper</span><span class="p">(</span><span class="n">MyMapper</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So, if you were to call: <code class="docutils literal notranslate"><span class="pre">pyb.Pin("LeftMotorDir",</span> <span class="pre">pyb.Pin.OUT_PP)</span></code>
+then <code class="docutils literal notranslate"><span class="pre">"LeftMotorDir"</span></code> is passed directly to the mapper function.</p>
+<p>To summarise, the following order determines how things get mapped into
+an ordinal pin number:</p>
+<ol class="arabic simple">
+<li>Directly specify a pin object</li>
+<li>User supplied mapping function</li>
+<li>User supplied mapping (object must be usable as a dictionary key)</li>
+<li>Supply a string which matches a board pin</li>
+<li>Supply a string which matches a CPU port/pin</li>
+</ol>
+<p>You can set <code class="docutils literal notranslate"><span class="pre">pyb.Pin.debug(True)</span></code> to get some debug information about
+how a particular object gets mapped to a pin.</p>
+<p>When a pin has the <code class="docutils literal notranslate"><span class="pre">Pin.PULL_UP</span></code> or <code class="docutils literal notranslate"><span class="pre">Pin.PULL_DOWN</span></code> pull-mode enabled,
+that pin has an effective 40k Ohm resistor pulling it to 3V3 or GND
+respectively.</p>
+<p>Now every time a falling edge is seen on the gpio pin, the callback will be
+executed. Caution: mechanical push buttons have “bounce” and pushing or
+releasing a switch will often generate multiple edges.
+See: <a class="reference external" href="http://www.eng.utah.edu/~cs5780/debouncing.pdf">http://www.eng.utah.edu/~cs5780/debouncing.pdf</a> for a detailed
+explanation, along with various techniques for debouncing.</p>
+<p>All pin objects go through the pin mapper to come up with one of the
+gpio pins.</p>
+<div class="section" id="constructors">
+<h2>Constructors<a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#constructors" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyb.pyb.Pin">
+<em class="property">class </em><code class="descclassname">pyb.</code><code class="descname">Pin</code><span class="sig-paren">(</span><em>id</em>, <em>...</em><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.pyb.Pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new Pin object associated with the id. If additional arguments are given,
+they are used to initialise the pin. See <code class="xref py py-meth docutils literal notranslate"><span class="pre">pin.init()</span></code>.</p>
+</dd></dl>
+</div>
+<div class="section" id="class-methods">
+<h2>Class methods<a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#class-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="classmethod">
+<dt id="pyb.Pin.debug">
+<em class="property">classmethod </em><code class="descclassname">Pin.</code><code class="descname">debug</code><span class="sig-paren">(</span><span class="optional">[</span><em>state</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or set the debugging state (<code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code> for on or off).</p>
+</dd></dl>
+<dl class="classmethod">
+<dt id="pyb.Pin.dict">
+<em class="property">classmethod </em><code class="descclassname">Pin.</code><code class="descname">dict</code><span class="sig-paren">(</span><span class="optional">[</span><em>dict</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or set the pin mapper dictionary.</p>
+</dd></dl>
+<dl class="classmethod">
+<dt id="pyb.Pin.mapper">
+<em class="property">classmethod </em><code class="descclassname">Pin.</code><code class="descname">mapper</code><span class="sig-paren">(</span><span class="optional">[</span><em>fun</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.mapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or set the pin mapper function.</p>
+</dd></dl>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="pyb.Pin.init">
+<code class="descclassname">Pin.</code><code class="descname">init</code><span class="sig-paren">(</span><em>mode</em>, <em>pull=Pin.PULL_NONE</em>, <em>af=-1</em><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise the pin:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">mode</span></code> can be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Pin.IN</span></code> - configure the pin for input;</li>
+<li><code class="docutils literal notranslate"><span class="pre">Pin.OUT_PP</span></code> - configure the pin for output, with push-pull control;</li>
+<li><code class="docutils literal notranslate"><span class="pre">Pin.OUT_OD</span></code> - configure the pin for output, with open-drain control;</li>
+<li><code class="docutils literal notranslate"><span class="pre">Pin.AF_PP</span></code> - configure the pin for alternate function, pull-pull;</li>
+<li><code class="docutils literal notranslate"><span class="pre">Pin.AF_OD</span></code> - configure the pin for alternate function, open-drain;</li>
+<li><code class="docutils literal notranslate"><span class="pre">Pin.ANALOG</span></code> - configure the pin for analog.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">pull</span></code> can be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Pin.PULL_NONE</span></code> - no pull up or down resistors;</li>
+<li><code class="docutils literal notranslate"><span class="pre">Pin.PULL_UP</span></code> - enable the pull-up resistor;</li>
+<li><code class="docutils literal notranslate"><span class="pre">Pin.PULL_DOWN</span></code> - enable the pull-down resistor.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">when mode is <code class="docutils literal notranslate"><span class="pre">Pin.AF_PP</span></code> or <code class="docutils literal notranslate"><span class="pre">Pin.AF_OD</span></code>, then af can be the index or name
+of one of the alternate functions associated with a pin.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>Returns: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.value">
+<code class="descclassname">Pin.</code><code class="descname">value</code><span class="sig-paren">(</span><span class="optional">[</span><em>value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or set the digital logic level of the pin:</p>
+<blockquote>
+<div><ul class="simple">
+<li>With no argument, return 0 or 1 depending on the logic level of the pin.</li>
+<li>With <code class="docutils literal notranslate"><span class="pre">value</span></code> given, set the logic level of the pin. <code class="docutils literal notranslate"><span class="pre">value</span></code> can be
+anything that converts to a boolean. If it converts to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the pin
+is set high, otherwise it is set low.</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.__str__">
+<code class="descclassname">Pin.</code><code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string describing the pin object.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.af">
+<code class="descclassname">Pin.</code><code class="descname">af</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.af" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the currently configured alternate-function of the pin. The
+integer returned will match one of the allowed constants for the af
+argument to the init function.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.af_list">
+<code class="descclassname">Pin.</code><code class="descname">af_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.af_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array of alternate functions available for this pin.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.gpio">
+<code class="descclassname">Pin.</code><code class="descname">gpio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.gpio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the base address of the GPIO block associated with this pin.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.mode">
+<code class="descclassname">Pin.</code><code class="descname">mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the currently configured mode of the pin. The integer returned
+will match one of the allowed constants for the mode argument to the init
+function.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.name">
+<code class="descclassname">Pin.</code><code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin name.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.names">
+<code class="descclassname">Pin.</code><code class="descname">names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the cpu and board names for this pin.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.pin">
+<code class="descclassname">Pin.</code><code class="descname">pin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin number.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.port">
+<code class="descclassname">Pin.</code><code class="descname">port</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin port.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.Pin.pull">
+<code class="descclassname">Pin.</code><code class="descname">pull</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.pull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the currently configured pull of the pin. The integer returned
+will match one of the allowed constants for the pull argument to the init
+function.</p>
+</dd></dl>
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#constants" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="pyb.Pin.AF_OD">
+<code class="descclassname">Pin.</code><code class="descname">AF_OD</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.AF_OD" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialise the pin to alternate-function mode with an open-drain drive</p>
+</dd></dl>
+<dl class="data">
+<dt id="pyb.Pin.AF_PP">
+<code class="descclassname">Pin.</code><code class="descname">AF_PP</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.AF_PP" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialise the pin to alternate-function mode with a push-pull drive</p>
+</dd></dl>
+<dl class="data">
+<dt id="pyb.Pin.ANALOG">
+<code class="descclassname">Pin.</code><code class="descname">ANALOG</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.ANALOG" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialise the pin to analog mode</p>
+</dd></dl>
+<dl class="data">
+<dt id="pyb.Pin.IN">
+<code class="descclassname">Pin.</code><code class="descname">IN</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.IN" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialise the pin to input mode</p>
+</dd></dl>
+<dl class="data">
+<dt id="pyb.Pin.OUT_OD">
+<code class="descclassname">Pin.</code><code class="descname">OUT_OD</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.OUT_OD" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialise the pin to output mode with an open-drain drive</p>
+</dd></dl>
+<dl class="data">
+<dt id="pyb.Pin.OUT_PP">
+<code class="descclassname">Pin.</code><code class="descname">OUT_PP</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.OUT_PP" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialise the pin to output mode with a push-pull drive</p>
+</dd></dl>
+<dl class="data">
+<dt id="pyb.Pin.PULL_DOWN">
+<code class="descclassname">Pin.</code><code class="descname">PULL_DOWN</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.PULL_DOWN" title="Permalink to this definition">¶</a></dt>
+<dd><p>enable the pull-down resistor on the pin</p>
+</dd></dl>
+<dl class="data">
+<dt id="pyb.Pin.PULL_NONE">
+<code class="descclassname">Pin.</code><code class="descname">PULL_NONE</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.PULL_NONE" title="Permalink to this definition">¶</a></dt>
+<dd><p>don’t enable any pull up or down resistors on the pin</p>
+</dd></dl>
+<dl class="data">
+<dt id="pyb.Pin.PULL_UP">
+<code class="descclassname">Pin.</code><code class="descname">PULL_UP</code><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.Pin.PULL_UP" title="Permalink to this definition">¶</a></dt>
+<dd><p>enable the pull-up resistor on the pin</p>
+</dd></dl>
+</div>
+</div>
+<div class="section" id="class-pinaf-pin-alternate-functions">
+<h1>class PinAF – Pin Alternate Functions<a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#class-pinaf-pin-alternate-functions" title="Permalink to this headline">¶</a></h1>
+<p>A Pin represents a physical pin on the microprocessor. Each pin
+can have a variety of functions (GPIO, I2C SDA, etc). Each PinAF
+object represents a particular function for a pin.</p>
+<p>Usage Model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">P0</span>
+<span class="n">p0_af</span> <span class="o">=</span> <span class="n">p0</span><span class="o">.</span><span class="n">af_list</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>p0_af will now contain an array of PinAF objects which are available on
+pin P0.</p>
+<p>Normally, each peripheral would configure the af automatically, but sometimes
+the same function is available on multiple pins, and having more control
+is desired.</p>
+<div class="section" id="id1">
+<h2>Methods<a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="pyb.pinaf.__str__">
+<code class="descclassname">pinaf.</code><code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.pinaf.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string describing the alternate function.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.pinaf.index">
+<code class="descclassname">pinaf.</code><code class="descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.pinaf.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the alternate function index.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.pinaf.name">
+<code class="descclassname">pinaf.</code><code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.pinaf.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the alternate function.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyb.pinaf.reg">
+<code class="descclassname">pinaf.</code><code class="descname">reg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://docs.openmv.io/library/pyb.Pin.html#pyb.pinaf.reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the base register associated with the peripheral assigned to this
+alternate function. For example, if the alternate function were TIM2_CH3
+this would return stm.TIM2</p>
+</dd></dl>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+<a href="https://docs.openmv.io/library/pyb.RTC.html" class="btn btn-neutral float-right" title="class RTC – real time clock" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+<a href="https://docs.openmv.io/library/pyb.LED.html" class="btn btn-neutral float-left" title="class LED – LED object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+</div>
+<hr>
+<div role="contentinfo">
+<p>
+© Copyright 2014-2021, Damien P. George, Paul Sokolovsky, OpenMV LLC, and contributors
+<span class="lastupdated">
+Last updated on 27 Jun 2021.
+</span>
+</p>
+</div>
+Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org/">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span class="fa fa-book"> Language and External Links</span>
+<span class="fa fa-caret-down"></span>
+</span>
+<div class="rst-other-versions">
+<dl>
+<dt>Language</dt>
+<dd>
+<a href="https://openmv.io/">English</a>
+</dd>
+<dd>
+<a href="http://doc.singtown.cc/">中文</a>
+</dd>
+</dl>
+<hr>
+<dl>
+<dt>External links</dt>
+<dd>
+<a href="https://openmv.io/">openmv.io</a>
+</dd>
+<dd>
+<a href="http://forums.openmv.io/">forums.openmv.io</a>
+</dd>
+<dd>
+<a href="https://github.com/openmv/openmv">github.com/openmv/openmv</a>
+</dd>
+<dd>
+<a href="http://micropython.org/">micropython.org</a>
+</dd>
+<dd>
+<a href="http://forum.micropython.org/">forum.micropython.org</a>
+</dd>
+<dd>
+<a href="https://github.com/micropython/micropython">github.com/micropython/micropython</a>
+</dd>
+</dl>
+</div>
+</div>
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body></html>
