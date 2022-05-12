@@ -13,9 +13,10 @@ import time
 # Можешь менять, но они должны быть одинаковые по площади (width * height)
 # Размеры полного изображения - 320 * 240 (width * height)
 # LINESROI - для нахождения линий на полу (не зависит от LEFTROI и RIGHTROI)
-LEFTROI = (0, 0, 160, 240)
-RIGHTROI = (161, 0, 160, 240)
-LINESROI = (0, 140, 320, 100)
+LEFTROI = (0, 0, 40, 60)
+RIGHTROI = (40, 0, 40, 60)
+LINESROI = (0, 35, 80, 25)
+CUBESROI = (0, 0, 80, 60)
 
 
 # Для определения цветов
@@ -25,12 +26,15 @@ thresholds = [(0, 17, -14, 12, -8, 22)]  # Черные стенки
 # thresholds_blue_line = []  # Синий цвет
 thresholds_blue_line = [(24, 54, -36, 11, -44, -5)]# мои, на месте
 thresholds_orange_line = [(25, 47, 6, 68, -2, 57)]  # Оранжевый цвет
+thresholds_green_cube = [(30, 100, -74, -15, 29, 83)] # цвет зеленого кубика
+thresholds_red_cube = [(19, 79, 24, 127, -15, 127)] # цвет красного кубика
 
 
 # Хз почему, но тут вроде инвертировано, но проверь на тренировочной заезде
 # Если при MIN_SPEED = 100 не тормозит, то ставь 0
 MAX_SPEED = 40
 MIN_SPEED = 100
+DELAY = 1 # Время торможения и ускорения в секундах
 
 # Угол, при котором он едет прямо (под нашего настрой)
 ZERO_ANGLE = -45
@@ -62,7 +66,7 @@ DEBUG = 1
 
 sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
-sensor.set_framesize(sensor.QVGA)
+sensor.set_framesize(sensor.QQQVGA)
 sensor.skip_frames(time=2000)
 sensor.set_auto_gain(False)
 sensor.set_auto_whitebal(False)
@@ -78,9 +82,34 @@ pinADir1.value(1)
 tim = pyb.Timer(2, freq=1000)
 chA = tim.channel(3, pyb.Timer.PWM, pin=pyb.Pin("P4"))
 servo = pyb.Servo(2)
+button = pyb.Pin("P0", pyb.Pin.PULL_NONE ,pyb.Pin.IN)
 
 servo.angle(ZERO_ANGLE)
 chA.pulse_width_percent(MIN_SPEED)
+
+
+def start_moving():
+    # Плавный старт
+    for c_speed in range(MIN_SPEED, MAX_SPEED, 10):
+        chA.pulse_width_percent(c_speed)
+        utime.sleep(DELAY / ((MAX_SPEED - MIN_SPEED) / 10))
+
+
+def stop_moving():
+    # Плавная остановка
+    for c_speed in range(MAX_SPEED, MIN_SPEED, 10):
+        chA.pulse_width_percent(c_speed)
+        utime.sleep(DELAY / ((MAX_SPEED - MIN_SPEED) / 10))
+
+
+def find_cube(roi, c_thresholds):
+    # Поиск кубов нужного цвета в roi
+    cube = img.find_blobs(c_thresholds, roi=roi, pixels_threshold=200, area_threshold=200)
+    if len(cube) != 0:
+        return cube.area()
+    else:
+        return 0
+
 
 def find_biggest_blob(img, roi):
     """Для определения самого большого видимого блоба в этой части"""
@@ -151,12 +180,9 @@ def pid(dif):
 ROTATION = False
 FLAG = ""
 LASTFLAG = ""
-NOTCHECKED = True
-ROTK = 0
-CORNER_COUNT = 0
-f = 1
+CORNER_COUNT = 0bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-button = pyb.Pin("P0", pyb.Pin.PULL_NONE ,pyb.Pin.IN)
+
 while button.value() == 0:
     pass
 
@@ -168,19 +194,8 @@ while True:
     if CORNER_COUNT < 12:
         chA.pulse_width_percent(MAX_SPEED)
     else:
-        # past = time.monotonic()
-        # chA.pulse_width_percent(MAX_SPEED)
-        # if time.monotonic() - past >= 1000:
-        """
-        past = pyb.millis()
-        if pyb.millis() - past > 5000:
-
-        """
         servo.angle(ZERO_ANGLE)
         break
-
-        # chA.pulse_width_percent(MIN_SPEED)
-
 
 
     # Получение изображения с камеры
@@ -201,19 +216,16 @@ while True:
     # Определение цвета найденной линии (если нашлась)
     if len(blue_lines) != 0 or len(orange_lines) != 0:
 
-        # ROTK - коэффициент, определяющий направление поворота
-        # ROTK < 0 => поворот направо, иначе налево
         if len(orange_lines) != 0:
-            ROTK -= sum_weights(orange_lines)
             FLAG = "orange"
         elif len(orange_lines) == 0 and len(blue_lines) != 0:
-            ROTK += sum_weights(blue_lines)
             FLAG = "blue"
 
         ROTATION = True
 
     else:
         ROTATION = False
+
     temp_deg = 0
     # Действия в том случае, если перед нами поворот
     if ROTATION:
@@ -243,6 +255,14 @@ while True:
         # Здесь определяется площадь черных стенок справа и слева
         left_blob_weight, left_blob = find_biggest_blob(img, LEFTROI)
         right_blob_weight, right_blob = find_biggest_blob(img, RIGHTROI)
+
+        # Поиск зеленого и красного куба
+        green_cube_weight = find_cube(CUBESROI, thresholds_green_cube)
+        red_cube_weight = find_cube(CUBESROI, thresholds_red_cube)
+
+        # Добавление поправки из-за кубов
+        left_blob_weight += red_cube_weight
+        right_blob_weight += green_cube_weight
 
         # Отрисовка (при дебаге)
         draw_blob(left_blob, img)
