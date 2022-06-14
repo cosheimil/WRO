@@ -11,7 +11,7 @@ import time
 # ROI = Rectangle Of Interest (x, y, width, height)
 # Левый и правый сектор определяют, в какой части изображания ищутся стенки
 # Можешь менять, но они должны быть одинаковые по площади (width * height)
-# Размеры полного изображения - 320 * 240 (width * height)
+# Размеры полного изображения - 80 * 60 (width * height)
 # LINESROI - для нахождения линий на полу (не зависит от LEFTROI и RIGHTROI)
 LEFTROI = (0, 0, 40, 60)
 RIGHTROI = (40, 0, 40, 60)
@@ -34,6 +34,7 @@ thresholds_red_cube = [(19, 79, 24, 127, -15, 127)] # цвет красного 
 # Если при MIN_SPEED = 100 не тормозит, то ставь 0
 MAX_SPEED = 40
 MIN_SPEED = 100
+# Максимально маленькое delay
 DELAY = 1 # Время торможения и ускорения в секундах
 
 # Угол, при котором он едет прямо (под нашего настрой)
@@ -42,23 +43,12 @@ ZERO_ANGLE = -45
 # Угол, на который он будет поворачивать направо/налево при виде линий
 # Для нашего робота может быть что-то другое, но важно, что
 # ZERO_ANGLE - RIGHT_ANGLE  = ZERO_ANGLE - LEFT_ANGLE
-RIGHT_ANGLE = -80
-LEFT_ANGLE = -10
+# RIGHT_ANGLE = -80
+# LEFT_ANGLE = -10
 
 # Максимальный (по модулю) угол отклонения колес от оси, при котороый
 # он едет прямо (под нашего настрой)
 MAX_ANGLE = 36
-
-
-# Возможные проблемы
-# В случае стремительного движения в стенку на прямых участках
-# Посмотри на 168 строку
-# Там стоит "-" перед def_percent, поменяй, если вознилка проблема
-
-# ПИД сейчас описан функцией, но не используется.
-# Если найдете лучшим его изать, то чуть выше pid все коэфы
-# Если нет, удали этот кусок кода
-
 
 
 DEBUG = 1
@@ -97,7 +87,7 @@ def start_moving():
 
 def stop_moving():
     # Плавная остановка
-    for c_speed in range(MAX_SPEED, MIN_SPEED, 10):
+    for c_speed in range(MAX_SPEED, MIN_SPEED, -10):
         chA.pulse_width_percent(c_speed)
         utime.sleep(DELAY / ((MAX_SPEED - MIN_SPEED) / 10))
 
@@ -180,11 +170,13 @@ def pid(dif):
 ROTATION = False
 FLAG = ""
 LASTFLAG = ""
-CORNER_COUNT = 0bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+CORNER_COUNT = 0
 
 
 while button.value() == 0:
     pass
+
+start_moving()
 
 while True:
     clock.tick()
@@ -205,7 +197,7 @@ while True:
     for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=LINESROI,
                                area_threshold=200):
         draw_blob(blob, img)
-        print(blob.rotation_deg())
+        # print(blob.rotation_deg())
         blue_lines.append(blob)
 
     for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=LINESROI,
@@ -270,6 +262,8 @@ while True:
 
         # На основе разницы кол-ва черного справа и слева поворачиваем на угол
         dif = left_blob_weight - right_blob_weight
+        
+        # Почекать коэф (4) - возможно ее не должно быть
         dif_percent = int(dif / (LEFTROI[2] * LEFTROI[3]) * 4)
 
         servo.angle(-dif_percent * MAX_ANGLE + ZERO_ANGLE)
@@ -278,6 +272,8 @@ while True:
     if LASTFLAG != FLAG:
         LASTFLAG = FLAG
         CORNER_COUNT += 0.5
+        
+stop_moving()
 """
 while True:
     pass
