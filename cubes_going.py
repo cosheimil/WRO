@@ -92,7 +92,7 @@ def stop_moving():
         utime.sleep(DELAY / ((MAX_SPEED - MIN_SPEED) / 10))
 
 
-def find_cube(roi, c_thresholds):
+def find_cube_weight(roi, c_thresholds):
     # Поиск кубов нужного цвета в roi
     cubes = img.find_blobs(c_thresholds, roi=roi, pixels_threshold=200, area_threshold=200)
     if len(cubes) != 0:
@@ -182,105 +182,30 @@ CORNER_COUNT = 0
 
 #start_moving()
 
+def go_cube(color, weight):
+    if weight == 0:
+        return 0
+
+    if color == "red":
+        cube = img.find_blobs(thresholds_red_cube, roi=CUBESROI, pixels_threshold=200, area_threshold=200)[0]
+        cube_x = cube.cx()
+        dx = 80 - cube_x
+        ### Доделать, чтобы в зависимости от площади и dx поворачивал
+    else:
+        ###
+    clock.tick()
+    return go_cube(color, weight)
+
 while True:
     clock.tick()
     chA.pulse_width_percent(MAX_SPEED)
-    blue_lines = []
-    orange_lines = []
-    left_blob_weight = 0
-    right_blob_weight = 0
-    # Здесь проверка на кол-во пройденных поворотов
-    if CORNER_COUNT < 12:
-        chA.pulse_width_percent(MAX_SPEED)
-    else:
-        servo.angle(ZERO_ANGLE)
-        stop_moving()
-        break
 
+    green_cube_weight = find_cube_weight(CUBESROI, thresholds_green_cube)
+    red_cube_weight = find_cube_weight(CUBESROI, thresholds_red_cube)
 
-    # Получение изображения с камеры
-    img = sensor.snapshot().lens_corr(1.9, 1.2)
+    go_cube('green', green_cube_weight)
+    go_cube('red', red_cube_weight)
 
-    # Поиск линий
-    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=LINESROI,
-                               area_threshold=200):
-        draw_blob(blob, img)
-        # print(blob.rotation_deg())
-        blue_lines.append(blob)
-
-    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=LINESROI,
-                               area_threshold=200):
-        draw_blob(blob, img)
-        orange_lines.append(blob)
-
-    # Определение цвета найденной линии (если нашлась)
-    if len(blue_lines) != 0 or len(orange_lines) != 0:
-
-        if len(orange_lines) != 0:
-            FLAG = "orange"
-        elif len(orange_lines) == 0 and len(blue_lines) != 0:
-            FLAG = "blue"
-
-        ROTATION = True
-
-    else:
-        ROTATION = False
-
-    temp_deg = 0
-    # Действия в том случае, если перед нами поворот
-    if ROTATION:
-        if FLAG == "blue":
-            if blue_lines[len(blue_lines)-1].rotation_deg() > 90:
-                temp_deg = blue_lines[len(blue_lines)-1].rotation_deg() - 180
-            else:
-                temp_deg = blue_lines[len(blue_lines)-1].rotation_deg()
-        else:
-            if orange_lines[len(orange_lines)-1].rotation_deg() > 90:
-                temp_deg = orange_lines[len(orange_lines)-1].rotation_deg() - 180
-            else:
-                temp_deg = orange_lines[len(orange_lines)-1].rotation_deg()
-        if ZERO_ANGLE - temp_deg * 4 < RIGHT_ANGLE:
-            servo.angle(RIGHT_ANGLE)
-        elif ZERO_ANGLE - temp_deg * 4 > LEFT_ANGLE:
-            servo.angle(LEFT_ANGLE)
-        else:
-            servo.angle(ZERO_ANGLE - int(temp_deg * 4))
-
-
-
-
-
-    elif len(img.find_blobs(thresholds, pixels_threshold=200, area_threshold=200)) != 0:
-
-        # Здесь определяется площадь черных стенок справа и слева
-        left_blob_weight, left_blob = find_biggest_blob(img, LEFTROI)
-        right_blob_weight, right_blob = find_biggest_blob(img, RIGHTROI)
-
-        # Поиск зеленого и красного куба
-        green_cube_weight = find_cube(CUBESROI, thresholds_green_cube)
-        red_cube_weight = find_cube(CUBESROI, thresholds_red_cube)
-
-        # Добавление поправки из-за кубов
-        left_blob_weight = left_blob_weight * 1.5 + (red_cube_weight * 25)
-        right_blob_weight = right_blob_weight * 1.5 + (green_cube_weight * 25)
-
-        # Отрисовка (при дебаге)
-        draw_blob(left_blob, img)
-        draw_blob(right_blob, img)
-
-        # На основе разницы кол-ва черного справа и слева поворачиваем на угол
-        dif = left_blob_weight - right_blob_weight
-
-        # Почекать коэф (4) - возможно ее не должно быть
-        #######
-        dif_percent = dif / (LEFTROI[2] * LEFTROI[3])
-        #######
-        servo.angle(-dif_percent * MAX_ANGLE + ZERO_ANGLE)
-
-    # Подсчет кол-ва пройденных поворотов (прохождение каждой линии - половина поворота)
-    if LASTFLAG != FLAG:
-        LASTFLAG = FLAG
-        CORNER_COUNT += 0.5
 
 
 #pinADir0 = pyb.Pin('P4', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
