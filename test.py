@@ -25,9 +25,9 @@ CUBESROI = (0, 0, 80, 60)
 thresholds = [(0, 17, -14, 12, -8, 22)]  # Черные стенки
 # thresholds_blue_line = []  # Синий цвет
 thresholds_blue_line = [(24, 54, -36, 11, -44, -5)]# мои, на месте
-thresholds_orange_line = [(54, 64, -1, 19, 2, 31)]  # Оранжевый цвет
+thresholds_orange_line = [(25, 47, 6, 68, -2, 57)]  # Оранжевый цвет
 thresholds_green_cube = [(30, 100, -74, -15, 29, 83)] # цвет зеленого кубика
-thresholds_red_cube = [(26, 35, 26, 59, -7, 36)] # цвет красного кубика
+thresholds_red_cube = [(19, 79, 24, 127, -15, 127)] # цвет красного кубика
 
 
 # Хз почему, но тут вроде инвертировано, но проверь на тренировочной заезде
@@ -38,20 +38,20 @@ MIN_SPEED = 100
 DELAY = 1 # Время торможения и ускорения в секундах
 
 # Угол, при котором он едет прямо (под нашего настрой)
-ZERO_ANGLE = 30
+ZERO_ANGLE = -45
 
 # Угол, на который он будет поворачивать направо/налево при виде линий
 # Для нашего робота может быть что-то другое, но важно, что
 # ZERO_ANGLE - RIGHT_ANGLE  = ZERO_ANGLE - LEFT_ANGLE
-RIGHT_ANGLE = 0
-LEFT_ANGLE = 60
+RIGHT_ANGLE = -80
+LEFT_ANGLE = -10
 
 # Максимальный (по модулю) угол отклонения колес от оси, при котороый
 # он едет прямо (под нашего настрой)
-MAX_ANGLE = 30
+MAX_ANGLE = 36
 
 
-DEBUG = 0
+DEBUG = 1
 
 
 sensor.reset()
@@ -70,12 +70,13 @@ pinADir0 = pyb.Pin('P4', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
 pinADir1 = pyb.Pin('P3', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
 pinADir1.value(1)
 tim = pyb.Timer(2, freq=1000)
-chA = tim.channel(3, pyb.Timer.PWM, pin=pyb.Pin("P4"))
+chA = tim.channel(3, pyb.Timer.PWM, pin=pyb.Pin('P4'))
 servo = pyb.Servo(1)
-button = pyb.Pin("P0", pyb.Pin.PULL_UP ,pyb.Pin.IN)
+button = pyb.Pin("P0", pyb.Pin.PULL_NONE, pyb.Pin.IN)
 
 servo.angle(ZERO_ANGLE)
-chA.pulse_width_percent(MIN_SPEED)
+#chA.pulse_width_percent(MIN_SPEED)
+chA.pulse_width_percent(MAX_SPEED)
 
 
 def start_moving():
@@ -94,13 +95,9 @@ def stop_moving():
 
 def find_cube(roi, c_thresholds):
     # Поиск кубов нужного цвета в roi
-    cubes = img.find_blobs(c_thresholds, roi=roi, pixels_threshold=200, area_threshold=200)
-    if len(cubes) != 0:
-        big_cube = cubes[0]
-        for c in cubes:
-            if c.area() > big_cube.area():
-                big_cube = c
-        return big_cube.area()
+    cube = img.find_blobs(c_thresholds, roi=roi, pixels_threshold=200, area_threshold=200)
+    if len(cube) != 0:
+        return cube[0].area()
     else:
         return 0
 
@@ -270,9 +267,8 @@ while True:
         dif = left_blob_weight - right_blob_weight
 
         # Почекать коэф (4) - возможно ее не должно быть
-        #######
-        dif_percent = dif / (LEFTROI[2] * LEFTROI[3])
-        #######
+        dif_percent = int(dif / (LEFTROI[2] * LEFTROI[3]) * 4)
+
         servo.angle(-dif_percent * MAX_ANGLE + ZERO_ANGLE)
 
     # Подсчет кол-ва пройденных поворотов (прохождение каждой линии - половина поворота)
