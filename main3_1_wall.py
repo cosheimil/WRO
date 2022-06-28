@@ -15,9 +15,10 @@ import utime
 # LINESROI - для нахождения линий на полу (не зависит от LEFTROI и RIGHTROI)
 LEFTROI = (0, 0, 80, 120)
 RIGHTROI = (80, 0, 80, 120)
-LINESROI = (0, 60, 160, 60)
+LINESROI = (0, 20, 160, 100)
 CUBESROI = (0, 0, 160, 120)
 
+LEFTROI_TEST = (0, 0, 65, 120)
 
 # Для определения цветов
 # Если тут проблемы, то в OpenMV IDE Инструменты => Машинное зрение => Threshold Editor
@@ -28,7 +29,7 @@ thresholds_blue_line = [(24, 54, -36, 11, -44, -5)]# мои, на месте
 thresholds_orange_line = [(0, 100, 7, 41, -3, 61)]  # Оранжевый цвет
 thresholds_green_cube = [(30, 100, -74, -15, 29, 83)] # цвет зеленого кубика
 thresholds_red_cube = [(26, 35, 26, 59, -7, 36)] # цвет красного кубика
-thresholds_red_test = [(20, 32, 12, 64, -12, 58)]
+thresholds_red_test = [(22, 48, 5, 103, -30, 81)]
 
 # Хз почему, но тут вроде инвертировано, но проверь на тренировочной заезде
 # Если при MIN_SPEED = 100 не тормозит, то ставь 0
@@ -53,8 +54,8 @@ MAX_ANGLE = 30
 
 pix_thr = 10
 area_thr = 10
-CRIT_AREA = 180
-
+CRIT_AREA = 170
+NORMAL_WEIGHT = 1000
 
 DEBUG = 1
 
@@ -164,7 +165,7 @@ CORNER_COUNT = 0
     #pass
 
 start_moving()
-pid_red_cube = [0.5, 0.8, 0] # 0.3 0.5 0
+pid_red_cube = [0.4, 0.7, 0] # 0.3 0.5 0
 p_dx = 0
 ROTATE = 0
 
@@ -182,17 +183,17 @@ while True:
 
 
     # Получение изображения с камеры
-    img = sensor.snapshot().lens_corr(1.9, 1.0) # 1.9, 1.2
+    img = sensor.snapshot().lens_corr(1.0, 1.0) # 1.9, 1.2
 
     # Поиск линий
-    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=LINESROI,
-                               area_threshold=200):
+    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=100, roi=LINESROI,
+                               area_threshold=100):
         draw_blob(blob, img)
         # print(blob.rotation_deg())
         blue_lines.append(blob)
 
-    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=LINESROI,
-                               area_threshold=200):
+    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=100, roi=LINESROI,
+                               area_threshold=100):
         draw_blob(blob, img)
         orange_lines.append(blob)
 
@@ -219,7 +220,7 @@ while True:
     green_cube, green_cube_weight = find_cube(CUBESROI, thresholds_green_cube)
     red_cube, red_cube_weight = find_cube(CUBESROI, thresholds_red_cube)
 
-    if red_cube_weight != 0 and red_cube.cx() > 30:
+    if red_cube_weight != 0 and red_cube.cx() > 20 and red_cube.pixels() >= CRIT_AREA:
 
         cube = img.find_blobs(thresholds_red_test, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
         # debug
@@ -242,7 +243,7 @@ while True:
 
 
 
-    elif green_cube_weight != 0 and green_cube.cx() < 130:
+    elif green_cube_weight != 0 and green_cube.cx() < 140 and green_cube.pixels() >= CRIT_AREA:
 
 
         cube = img.find_blobs(thresholds_green_cube, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
@@ -262,26 +263,26 @@ while True:
 
 
 
-    elif ROTATION:
-        if FLAG == "blue":
-            draw_blob(blue_lines[len(blue_lines)-1], img)
-            if blue_lines[len(blue_lines)-1].rotation_deg() > 90:
-                temp_deg = blue_lines[len(blue_lines)-1].rotation_deg() - 180
-            else:
-                temp_deg = blue_lines[len(blue_lines)-1].rotation_deg()
-        else:
-            draw_blob(orange_lines[len(orange_lines)-1], img)
-            if orange_lines[len(orange_lines)-1].rotation_deg() > 90:
-                temp_deg = orange_lines[len(orange_lines)-1].rotation_deg() - 180
-            else:
-                temp_deg = orange_lines[len(orange_lines)-1].rotation_deg()
-        if ZERO_ANGLE - temp_deg * 4 < RIGHT_ANGLE:
-            servo.angle(RIGHT_ANGLE)
-        elif ZERO_ANGLE - temp_deg * 4 > LEFT_ANGLE:
-            servo.angle(LEFT_ANGLE)
-        else:
-            servo.angle(ZERO_ANGLE - int(temp_deg * 4))
-        chA.pulse_width_percent(MAX_SPEED)
+    #elif ROTATION:
+        #if FLAG == "blue":
+            #draw_blob(blue_lines[len(blue_lines)-1], img)
+            #if blue_lines[len(blue_lines)-1].rotation_deg() > 90:
+                #temp_deg = blue_lines[len(blue_lines)-1].rotation_deg() - 180
+            #else:
+                #temp_deg = blue_lines[len(blue_lines)-1].rotation_deg()
+        #else:
+            #draw_blob(orange_lines[len(orange_lines)-1], img)
+            #if orange_lines[len(orange_lines)-1].rotation_deg() > 90:
+                #temp_deg = orange_lines[len(orange_lines)-1].rotation_deg() - 180
+            #else:
+                #temp_deg = orange_lines[len(orange_lines)-1].rotation_deg()
+        #if ZERO_ANGLE - temp_deg * 4 < RIGHT_ANGLE:
+            #servo.angle(RIGHT_ANGLE)
+        #elif ZERO_ANGLE - temp_deg * 4 > LEFT_ANGLE:
+            #servo.angle(LEFT_ANGLE)
+        #else:
+            #servo.angle(ZERO_ANGLE - int(temp_deg * 4))
+        #chA.pulse_width_percent(MAX_SPEED)
 
 
 
@@ -289,37 +290,42 @@ while True:
 
     elif len(img.find_blobs(thresholds, pixels_threshold=200, area_threshold=200)) != 0:
 
+        if ROTATE == '':
         # Здесь определяется площадь черных стенок справа и слева
-        left_blob_weight, left_blob = find_biggest_blob(img, LEFTROI)
-        right_blob_weight, right_blob = find_biggest_blob(img, RIGHTROI)
+            left_blob_weight, left_blob = find_biggest_blob(img, LEFTROI)
+            right_blob_weight, right_blob = find_biggest_blob(img, RIGHTROI)
 
-
+            chA.pulse_width_percent(MAX_SPEED)
         # Добавление поправки из-за кубов
 
         # Отрисовка (при дебаге)
-        draw_blob(left_blob, img)
-        draw_blob(right_blob, img)
-
-        # Проверка на перпендикулярность стене
-        all_weight = right_blob_weight + left_blob_weight
-        print(all_weight)
-        if all_weight >= 5700 and abs(right_blob_weight - left_blob_weight) <= 1000:
-            if ROTATE == 'clockwise':
-                servo.angle(-MAX_ANGLE + ZERO_ANGLE)
-            else:
-                servo.angle(MAX_ANGLE + ZERO_ANGLE)
-        else:
-        # На основе разницы кол-ва черного справа и слева поворачиваем на угол
+            draw_blob(left_blob, img)
+            draw_blob(right_blob, img)
             dif = left_blob_weight - right_blob_weight
-
-        # Почекать коэф (4) - возможно ее не должно быть
-        #######
             dif_percent = dif / (LEFTROI[2] * LEFTROI[3])
             dif_percent = max(dif_percent, -1)
             dif_percent = min(dif_percent, 1)
-        #######
+
             servo.angle(-dif_percent * MAX_ANGLE + ZERO_ANGLE)
+        elif ROTATE == 'clockwise':
+            left_blob_weight, left_blob = find_biggest_blob(img, LEFTROI_TEST)
+            draw_blob(left_blob, img)
+            print(left_blob_weight)
+            servo.angle(-MAX_ANGLE * (left_blob_weight - 750) / 1500 + ZERO_ANGLE)
             chA.pulse_width_percent(MAX_SPEED)
+            ##### по одной стенке написать
+
+        # Проверка на перпендикулярность стене
+        #all_black = find_biggest_blob(img, (0, 0, 160, 120))[0]
+        #all_weight = all_black
+        #print(all_weight)
+        #if all_weight >= 5700:
+            #if ROTATE == 'clockwise':
+                #servo.angle(-MAX_ANGLE + ZERO_ANGLE)
+            #else:
+                #servo.angle(MAX_ANGLE + ZERO_ANGLE)
+
+        #chA.pulse_width_percent(MAX_SPEED)
     else:
         chA.pulse_width_percent(MAX_SPEED)
     # Подсчет кол-ва пройденных поворотов (прохождение каждой линии - половина поворота)
