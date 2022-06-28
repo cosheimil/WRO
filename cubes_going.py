@@ -180,33 +180,86 @@ CORNER_COUNT = 0
 #while button.value() == 0:
     #pass
 
+
 #start_moving()
+# Красный справа, зеленый слева
 
-def go_cube(color, weight):
+# Попробовать подобрать лучший
+pid_red_cube = [0.2, 0.5, 0]
+
+p_dx = 0
+
+def go_cube(color, weight, p_dx):
     if weight == 0:
+        p_dx = 0
         return 0
-
+    cube = 0
     if color == "red":
         cube = img.find_blobs(thresholds_red_cube, roi=CUBESROI, pixels_threshold=200, area_threshold=200)[0]
         cube_x = cube.cx()
         dx = 80 - cube_x
         ### Доделать, чтобы в зависимости от площади и dx поворачивал
+        # тест только от dx
+        angle = ZERO_ANGLE + pid_red_cube[0] * dx + pid_red_cube[1] * (dx - p_dx)
+        if angle > LEFT_ANGLE:
+            angle = LEFT_ANGLE
+        elif angle < RIGHT_ANGLE:
+            angle = RIGHT_ANGLE
+        servo.angle(angle)
     else:
-        ###
+        print(1)
+    chA.pulse_width_percent(MAX_SPEED)
     clock.tick()
-    return go_cube(color, weight)
+    return go_cube(color, cube.area(), dx)
+
+
 
 while True:
     clock.tick()
     chA.pulse_width_percent(MAX_SPEED)
+    img = sensor.snapshot().lens_corr(1.9, 1.2)
 
     green_cube_weight = find_cube_weight(CUBESROI, thresholds_green_cube)
     red_cube_weight = find_cube_weight(CUBESROI, thresholds_red_cube)
 
-    go_cube('green', green_cube_weight)
-    go_cube('red', red_cube_weight)
+    #go_cube('green', green_cube_weight, p_dx)
+    #print(go_cube('red', red_cube_weight, p_dx))
 
+    while red_cube_weight != 0:
+        cube = img.find_blobs(thresholds_red_cube, roi=CUBESROI, pixels_threshold=200, area_threshold=200)[0]
+        cube_x = cube.cx()
+        dx = 80 - cube_x
+        ### Доделать, чтобы в зависимости от площади и dx поворачивал
+        # тест только от dx
+        angle = ZERO_ANGLE - (pid_red_cube[0] * dx + pid_red_cube[1] * (dx - p_dx))
+        if angle > LEFT_ANGLE:
+            angle = LEFT_ANGLE
+        elif angle < RIGHT_ANGLE:
+            angle = RIGHT_ANGLE
+        servo.angle(angle)
+        chA.pulse_width_percent(MAX_SPEED)
+        clock.tick()
+        red_cube_weight = find_cube_weight(CUBESROI, thresholds_red_cube)
+    else:
+        p_dx = 0
 
+    while green_cube_weight != 0:
+        cube = img.find_blobs(thresholds_green_cube, roi=CUBESROI, pixels_threshold=200, area_threshold=200)[0]
+        cube_x = cube.cx()
+        dx = 80 - cube_x
+        ### Доделать, чтобы в зависимости от площади и dx поворачивал
+        # тест только от dx
+        angle = ZERO_ANGLE + (pid_red_cube[0] * dx + pid_red_cube[1] * (dx - p_dx))
+        if angle > LEFT_ANGLE:
+            angle = LEFT_ANGLE
+        elif angle < RIGHT_ANGLE:
+            angle = RIGHT_ANGLE
+        servo.angle(angle)
+        chA.pulse_width_percent(MAX_SPEED)
+        clock.tick()
+        green_cube_weight = find_cube_weight(CUBESROI, thresholds_green_cube)
+    else:
+        p_dx = 0
 
 #pinADir0 = pyb.Pin('P4', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
 #pinADir1.value(0)
