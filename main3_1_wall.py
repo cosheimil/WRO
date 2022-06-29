@@ -1,4 +1,4 @@
-"""Multi Color Blob Tracking Example"""
+"""Multi Color Blob T[racking Example"""
 import time
 import math
 import sensor
@@ -13,7 +13,7 @@ import utime
 # Можешь менять, но они должны быть одинаковые по площади (width * height)
 # Размеры полного изображения - 80 * 60 (width * height)
 # LINESROI - для нахождения линий на полу (не зависит от LEFTROI и RIGHTROI)
-LEFTROI = (0, 0, 80, 120)
+LEFTROI = (0, 20, 80, 100)
 RIGHTROI = (80, 0, 80, 120)
 LINESROI = (0, 20, 160, 100)
 CUBESROI = (0, 0, 160, 120)
@@ -23,17 +23,19 @@ LEFTROI_TEST = (0, 0, 65, 120)
 # Для определения цветов
 # Если тут проблемы, то в OpenMV IDE Инструменты => Машинное зрение => Threshold Editor
 # Там подбираешь так, чтобы объект нужного цвета был белый, кортеж копируешь сюда
-thresholds = [(0, 17, -14, 12, -8, 22)]  # Черные стенки
+thresholds = [(0, 9, -128, 0, -36, 32)]  # Черные стенки
 # thresholds_blue_line = []  # Синий цвет
-thresholds_blue_line = [(24, 54, -36, 11, -44, -5)]# мои, на месте
-thresholds_orange_line = [(0, 100, 7, 41, -3, 61)]  # Оранжевый цвет
-thresholds_green_cube = [(30, 100, -74, -15, 29, 83)] # цвет зеленого кубика
+thresholds_blue_line = [(21, 38, -4, 17, -128, -11)]# мои, на месте
+thresholds_blue_old = [(24, 54, -36, 11, -44, -5)]
+thresholds_orange_old = [(0, 100, 7, 41, -3, 61)]  # Оранжевый цвет
+thresholds_orange_line = [(34, 72, 8, 84, -4, 42)]
+thresholds_green_cube = [(16, 39, -44, -10, 11, 54)] # цвет зеленого кубика
 thresholds_red_cube = [(26, 35, 26, 59, -7, 36)] # цвет красного кубика
-thresholds_red_test = [(22, 48, 5, 103, -30, 81)]
+thresholds_red_test = [(0, 24, 12, 68, -30, 81)]
 
 # Хз почему, но тут вроде инвертировано, но проверь на тренировочной заезде
 # Если при MIN_SPEED = 100 не тормозит, то ставь 0
-MAX_SPEED = 45
+MAX_SPEED = 35
 MIN_SPEED = 100
 CUBE_SPEED = 55
 # Максимально маленькое delay
@@ -54,7 +56,7 @@ MAX_ANGLE = 30
 
 pix_thr = 10
 area_thr = 10
-CRIT_AREA = 170
+CRIT_AREA = 150
 NORMAL_WEIGHT = 1000
 
 DEBUG = 1
@@ -64,9 +66,9 @@ sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QQVGA) # 80 * 60 / 160 * 120
 sensor.skip_frames(time=2000)
-sensor.set_auto_gain(False)
-sensor.set_auto_whitebal(False)
-sensor.set_auto_exposure(False)
+sensor.set_auto_gain(False, 5.45935)
+sensor.set_auto_whitebal(False, rgb_gain_db=(62.7419, 60.2071, 62.2261))
+sensor.set_auto_exposure(False, 16874)
 sensor.set_vflip(True)
 sensor.set_hmirror(True)
 clock = time.clock()
@@ -105,9 +107,9 @@ def find_cube(roi, c_thresholds):
     if len(cubes) != 0:
         big_cube = cubes[0]
         for c in cubes:
-            if c.area() > big_cube.area():
+            if c.pixels() > big_cube.pixels():
                 big_cube = c
-        return big_cube, big_cube.area()
+        return big_cube, big_cube.pixels()
     else:
         return 0, 0
 
@@ -194,6 +196,7 @@ while True:
 
     for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=100, roi=LINESROI,
                                area_threshold=100):
+        ########################################
         draw_blob(blob, img)
         orange_lines.append(blob)
 
@@ -218,10 +221,13 @@ while True:
     # Действия в том случае, если перед нами поворот
     # Поиск зеленого и красного куба
     green_cube, green_cube_weight = find_cube(CUBESROI, thresholds_green_cube)
-    red_cube, red_cube_weight = find_cube(CUBESROI, thresholds_red_cube)
-
+    red_cube, red_cube_weight = find_cube(CUBESROI, thresholds_red_test)
+    if red_cube:
+        print(red_cube.cx())
+    if green_cube:
+        print(green_cube.cx())
     if red_cube_weight != 0 and red_cube.cx() > 20 and red_cube.pixels() >= CRIT_AREA:
-
+        print('yes', red_cube.cx())
         cube = img.find_blobs(thresholds_red_test, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
         # debug
         draw_blob(cube, img)
@@ -244,7 +250,7 @@ while True:
 
 
     elif green_cube_weight != 0 and green_cube.cx() < 140 and green_cube.pixels() >= CRIT_AREA:
-
+        print('yes', green_cube.cx())
 
         cube = img.find_blobs(thresholds_green_cube, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
         # debug
@@ -310,8 +316,10 @@ while True:
         elif ROTATE == 'clockwise':
             left_blob_weight, left_blob = find_biggest_blob(img, LEFTROI_TEST)
             draw_blob(left_blob, img)
+
+            ####
             print(left_blob_weight)
-            servo.angle(-MAX_ANGLE * (left_blob_weight - 750) / 1500 + ZERO_ANGLE)
+            servo.angle(-MAX_ANGLE * (left_blob_weight - 700) / 1500 + ZERO_ANGLE)
             chA.pulse_width_percent(MAX_SPEED)
             ##### по одной стенке написать
 

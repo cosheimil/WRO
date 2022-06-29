@@ -74,9 +74,7 @@ chA = tim.channel(3, pyb.Timer.PWM, pin=pyb.Pin('P4'))
 servo = pyb.Servo(1)
 button = pyb.Pin("P0", pyb.Pin.PULL_NONE, pyb.Pin.IN)
 
-servo.angle(ZERO_ANGLE)
-#chA.pulse_width_percent(MIN_SPEED)
-chA.pulse_width_percent(MAX_SPEED)
+
 
 
 def start_moving():
@@ -179,104 +177,4 @@ CORNER_COUNT = 0
 
 #start_moving()
 
-while True:
-    clock.tick()
-    chA.pulse_width_percent(MAX_SPEED)
-    blue_lines = []
-    orange_lines = []
-    # Здесь проверка на кол-во пройденных поворотов
-    if CORNER_COUNT < 12:
-        chA.pulse_width_percent(MAX_SPEED)
-    else:
-        servo.angle(ZERO_ANGLE)
-        stop_moving()
-        break
-
-
-    # Получение изображения с камеры
-    img = sensor.snapshot().lens_corr(1.9, 1.2)
-
-    # Поиск линий
-    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=200, roi=LINESROI,
-                               area_threshold=200):
-        draw_blob(blob, img)
-        # print(blob.rotation_deg())
-        blue_lines.append(blob)
-
-    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=200, roi=LINESROI,
-                               area_threshold=200):
-        draw_blob(blob, img)
-        orange_lines.append(blob)
-
-    # Определение цвета найденной линии (если нашлась)
-    if len(blue_lines) != 0 or len(orange_lines) != 0:
-
-        if len(orange_lines) != 0:
-            FLAG = "orange"
-        elif len(orange_lines) == 0 and len(blue_lines) != 0:
-            FLAG = "blue"
-
-        ROTATION = True
-
-    else:
-        ROTATION = False
-
-    temp_deg = 0
-    # Действия в том случае, если перед нами поворот
-    if ROTATION:
-        if FLAG == "blue":
-            if blue_lines[len(blue_lines)-1].rotation_deg() > 90:
-                temp_deg = blue_lines[len(blue_lines)-1].rotation_deg() - 180
-            else:
-                temp_deg = blue_lines[len(blue_lines)-1].rotation_deg()
-        else:
-            if orange_lines[len(orange_lines)-1].rotation_deg() > 90:
-                temp_deg = orange_lines[len(orange_lines)-1].rotation_deg() - 180
-            else:
-                temp_deg = orange_lines[len(orange_lines)-1].rotation_deg()
-        if ZERO_ANGLE - temp_deg * 4 < RIGHT_ANGLE:
-            servo.angle(RIGHT_ANGLE)
-        elif ZERO_ANGLE - temp_deg * 4 > LEFT_ANGLE:
-            servo.angle(LEFT_ANGLE)
-        else:
-            servo.angle(ZERO_ANGLE - int(temp_deg * 4))
-
-
-
-
-
-    elif len(img.find_blobs(thresholds, pixels_threshold=200, area_threshold=200)) != 0:
-
-        # Здесь определяется площадь черных стенок справа и слева
-        left_blob_weight, left_blob = find_biggest_blob(img, LEFTROI)
-        right_blob_weight, right_blob = find_biggest_blob(img, RIGHTROI)
-
-        # Поиск зеленого и красного куба
-        green_cube_weight = find_cube(CUBESROI, thresholds_green_cube)
-        red_cube_weight = find_cube(CUBESROI, thresholds_red_cube)
-
-        # Добавление поправки из-за кубов
-        left_blob_weight += red_cube_weight
-        right_blob_weight += green_cube_weight
-
-        # Отрисовка (при дебаге)
-        draw_blob(left_blob, img)
-        draw_blob(right_blob, img)
-
-        # На основе разницы кол-ва черного справа и слева поворачиваем на угол
-        dif = left_blob_weight - right_blob_weight
-
-        # Почекать коэф (4) - возможно ее не должно быть
-        dif_percent = int(dif / (LEFTROI[2] * LEFTROI[3]) * 4)
-
-        servo.angle(-dif_percent * MAX_ANGLE + ZERO_ANGLE)
-
-    # Подсчет кол-ва пройденных поворотов (прохождение каждой линии - половина поворота)
-    if LASTFLAG != FLAG:
-        LASTFLAG = FLAG
-        CORNER_COUNT += 0.5
-
-
-#pinADir0 = pyb.Pin('P4', pyb.Pin.OUT_PP, pyb.Pin.PULL_NONE)
-#pinADir1.value(0)
-#pinADir0.value(0)
+servo.angle(120)
