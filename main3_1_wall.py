@@ -13,24 +13,25 @@ import utime
 # Можешь менять, но они должны быть одинаковые по площади (width * height)
 # Размеры полного изображения - 80 * 60 (width * height)
 # LINESROI - для нахождения линий на полу (не зависит от LEFTROI и RIGHTROI)
-LEFTROI = (0, 20, 80, 100)
-RIGHTROI = (80, 0, 80, 120)
+LEFTROI = (0, 20, 40, 100)
+RIGHTROI = (120, 20, 40, 100)
 LINESROI = (0, 20, 160, 100)
-CUBESROI = (0, 0, 160, 120)
+CUBESROI = (0, 30, 160, 90)
 
-LEFTROI_TEST = (0, 0, 65, 120)
+LEFTROI_TEST = (0, 20, 40, 100)
+RIGHTROI_TEST = (120, 20, 40, 100)
 
 # Для определения цветов
 # Если тут проблемы, то в OpenMV IDE Инструменты => Машинное зрение => Threshold Editor
 # Там подбираешь так, чтобы объект нужного цвета был белый, кортеж копируешь сюда
-thresholds = [(0, 9, -128, 0, -36, 32)]  # Черные стенки
+thresholds = [(0, 13, -33, 1, -6, 15)]  # Черные стенки
 # thresholds_blue_line = []  # Синий цвет
-thresholds_blue_line = [(21, 38, -4, 17, -128, -11)]# мои, на месте
+thresholds_blue_line = [(20, 83, 4, 38, -57, -18)]# мои, на месте
 thresholds_blue_old = [(24, 54, -36, 11, -44, -5)]
 thresholds_orange_old = [(0, 100, 7, 41, -3, 61)]  # Оранжевый цвет
-thresholds_orange_line = [(34, 72, 8, 84, -4, 42)]
-thresholds_green_cube = [(16, 39, -44, -10, 11, 54)] # цвет зеленого кубика
-thresholds_red_cube = [(26, 35, 26, 59, -7, 36)] # цвет красного кубика
+thresholds_orange_line = [(54, 87, 5, 53, 1, 127)]
+thresholds_green_cube = [(17, 48, -46, -11, 3, 51)] # цвет зеленого кубика
+thresholds_red_cube = [(14, 40, 32, 70, -15, 41)] # цвет красного кубика
 thresholds_red_test = [(0, 24, 12, 68, -30, 81)]
 
 # Хз почему, но тут вроде инвертировано, но проверь на тренировочной заезде
@@ -66,9 +67,9 @@ sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QQVGA) # 80 * 60 / 160 * 120
 sensor.skip_frames(time=2000)
-sensor.set_auto_gain(False, 5.45935)
-sensor.set_auto_whitebal(False, rgb_gain_db=(62.7419, 60.2071, 62.2261))
-sensor.set_auto_exposure(False, 16874)
+sensor.set_auto_gain(False, 4.21671)
+sensor.set_auto_whitebal(False, rgb_gain_db=(61.3194, 60.2071, 64.7213))
+#sensor.set_auto_exposure(False, 101244)
 sensor.set_vflip(True)
 sensor.set_hmirror(True)
 clock = time.clock()
@@ -166,6 +167,7 @@ CORNER_COUNT = 0
 #while button.value() == 0:
     #pass
 
+#time.sleep(1)
 start_moving()
 pid_red_cube = [0.4, 0.7, 0] # 0.3 0.5 0
 p_dx = 0
@@ -221,14 +223,14 @@ while True:
     # Действия в том случае, если перед нами поворот
     # Поиск зеленого и красного куба
     green_cube, green_cube_weight = find_cube(CUBESROI, thresholds_green_cube)
-    red_cube, red_cube_weight = find_cube(CUBESROI, thresholds_red_test)
-    if red_cube:
-        print(red_cube.cx())
-    if green_cube:
-        print(green_cube.cx())
-    if red_cube_weight != 0 and red_cube.cx() > 20 and red_cube.pixels() >= CRIT_AREA:
-        print('yes', red_cube.cx())
-        cube = img.find_blobs(thresholds_red_test, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
+    red_cube, red_cube_weight = find_cube(CUBESROI, thresholds_red_cube)
+    #if red_cube:
+        ##print(red_cube.cx())
+    #if green_cube:
+        #print(green_cube.cx())
+    if red_cube_weight != 0 and red_cube.cx() > 30 and red_cube.pixels() >= CRIT_AREA:
+        #print('yes', red_cube.cx())
+        cube = img.find_blobs(thresholds_red_cube, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
         # debug
         draw_blob(cube, img)
         # debug
@@ -249,8 +251,8 @@ while True:
 
 
 
-    elif green_cube_weight != 0 and green_cube.cx() < 140 and green_cube.pixels() >= CRIT_AREA:
-        print('yes', green_cube.cx())
+    elif green_cube_weight != 0 and green_cube.cx() < 130 and green_cube.pixels() >= CRIT_AREA:
+        #print('yes', green_cube.cx())
 
         cube = img.find_blobs(thresholds_green_cube, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
         # debug
@@ -319,10 +321,17 @@ while True:
 
             ####
             print(left_blob_weight)
-            servo.angle(-MAX_ANGLE * (left_blob_weight - 700) / 1500 + ZERO_ANGLE)
+            servo.angle(-MAX_ANGLE * (left_blob_weight - 400) / 700 + ZERO_ANGLE)
             chA.pulse_width_percent(MAX_SPEED)
-            ##### по одной стенке написать
 
+        elif ROTATE == 'counter_clockwise':
+            right_blob_weight, right_blob = find_biggest_blob(img, RIGHTROI_TEST)
+            draw_blob(right_blob, img)
+
+
+            #print(right_blob_weight)
+            servo.angle(MAX_ANGLE * (right_blob_weight - 400) / 700 + ZERO_ANGLE)
+            chA.pulse_width_percent(MAX_SPEED)
         # Проверка на перпендикулярность стене
         #all_black = find_biggest_blob(img, (0, 0, 160, 120))[0]
         #all_weight = all_black
