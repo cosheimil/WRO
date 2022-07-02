@@ -83,7 +83,7 @@ pinADir1.value(1)
 tim = pyb.Timer(2, freq=1000)
 chA = tim.channel(3, pyb.Timer.PWM, pin=pyb.Pin("P4"))
 servo = pyb.Servo(1)
-button = pyb.Pin("P0", pyb.Pin.PULL_NONE, pyb.Pin.IN)
+button = pyb.Pin('P1', pyb.Pin.IN, pyb.Pin.PULL_UP)
 
 servo.angle(ZERO_ANGLE)
 chA.pulse_width_percent(MIN_SPEED)
@@ -150,8 +150,10 @@ FLAG = ""
 LASTFLAG = ""
 CORNER_COUNT = 0
 
-while button.value() == 1:
-    pass
+while True:
+    clock.tick()
+    print(button.value())
+
 
 utime.sleep(2)
 
