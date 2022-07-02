@@ -150,8 +150,10 @@ FLAG = ""
 LASTFLAG = ""
 CORNER_COUNT = 0
 
-# while button.value() == 0:
-    # pass
+while button.value() == 1:
+    pass
+
+utime.sleep(2)
 
 start_moving()
 
@@ -161,138 +163,8 @@ p_dx = 0
 ROTATE = ''
 
 
-while True:
-    clock.tick()
-    blue_lines = []
-    orange_lines = []
-
-    # Здесь проверка на кол-во пройденных поворотов
-    if CORNER_COUNT >= 13:
-        stop_moving()
-        chA.pulse_width_percent(100)
-        break
-
-    img = sensor.snapshot().lens_corr(1.0, 1.0)
-
-    # Поиск линий
-    for blob in img.find_blobs(thresholds_blue_line, pixels_threshold=80, roi=LINESROI,
-                               area_threshold=80):
-        draw_blob(blob, img)
-        # print(blob.rotation_deg())
-        blue_lines.append(blob)
-
-    for blob in img.find_blobs(thresholds_orange_line, pixels_threshold=100, roi=LINESROI,
-                               area_threshold=100):
-        draw_blob(blob, img)
-        orange_lines.append(blob)
-
-    # Определение цвета найденной линии (если нашлась)
-    if len(blue_lines) != 0 or len(orange_lines) != 0:
-        if len(orange_lines) != 0:
-            FLAG = "orange"
-            if ROTATE == '':
-                ROTATE = 'clockwise'
-        elif len(orange_lines) == 0 and len(blue_lines) != 0:
-            FLAG = "blue"
-            if ROTATE == '':
-                ROTATE = 'counter_clockwise'
-
-    green_cube, green_cube_weight = find_cube(CUBESROI, thresholds_green_cube)
-    red_cube, red_cube_weight = find_cube(CUBESROI, thresholds_red_cube)
-
-    # На время квалов
-
-    #if red_cube:
-        #print(red_cube.cx())
-    #if green_cube:
-        #print(green_cube.cx())
-    #if red_cube_weight != 0 and red_cube.cx() > 30 and red_cube.pixels() >= CRIT_AREA:
-        #print('yes red:', red_cube.cx())
-        #cube = img.find_blobs(thresholds_red_cube, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
-        # debug
-        #draw_blob(cube, img)
-        # debug
-        #cube_x = cube.cx()
-        #if cube.pixels() >= CRIT_AREA:
-
-            # dx = CUBESROI[2] - cube_x
-            # angle = ZERO_ANGLE - (pid_red_cube[0] * dx + pid_red_cube[1] * (dx - p_dx))
-            # if angle > LEFT_ANGLE:
-                # angle = LEFT_ANGLE
-            #elif angle < RIGHT_ANGLE:
-                #angle = RIGHT_ANGLE
-            #servo.angle(angle)
-            #chA.pulse_width_percent(CUBE_SPEED)
-
-    if green_cube_weight != 0 and green_cube.cx() < 130 and green_cube.pixels() >= CRIT_AREA:
-        print('yes green', green_cube.cx())
-
-        cube = img.find_blobs(thresholds_green_cube, roi=CUBESROI, pixels_threshold=pix_thr, area_threshold=area_thr)[0]
-        # debug
-        draw_blob(cube, img)
-        # debug
-        if cube.pixels() >= CRIT_AREA:
-            cube_x = cube.cx()
-            dx = CUBESROI[2] - cube_x
-            angle = ZERO_ANGLE + (pid_red_cube[0] * dx + pid_red_cube[1] * (dx - p_dx))
-            if angle > LEFT_ANGLE:
-                angle = LEFT_ANGLE
-            elif angle < RIGHT_ANGLE:
-                angle = RIGHT_ANGLE
-            servo.angle(angle)
-            chA.pulse_width_percent(CUBE_SPEED)
-
-    elif len(img.find_blobs(thresholds, pixels_threshold=250, area_threshold=250)) != 0:
-        print('внутри определения')
-        left_blob_weight = find_blobs_weight(img, LEFTROI)
-        right_blob_weight = find_blobs_weight(img, RIGHTROI)
-        if ROTATE == '':
+chA.pulse_width_percent(MAX_SPEED)
+utime.sleep(5)
+stop_moving()
 
 
-            print('right_blob_weight',right_blob_weight)
-            print('left_blob_weight',left_blob_weight)
-            chA.pulse_width_percent(MAX_SPEED)
-
-            dif = left_blob_weight - right_blob_weight
-            print(dif)
-            dif_percent = dif / (LEFTROI[2] * LEFTROI[3]) * 3
-            dif_percent = max(dif_percent, -1)
-            dif_percent = min(dif_percent, 1)
-            servo.angle(-dif_percent * MAX_ANGLE + ZERO_ANGLE)
-
-        elif ROTATE == 'clockwise':
-
-            if right_blob_weight >= 2500:
-                left_blob_weight -= 500
-            # Поменять на / 400 на финале (?)
-            servo.angle(-MAX_ANGLE * (left_blob_weight - 900) / 1300 + ZERO_ANGLE)
-
-            print("left_blob_weight:", left_blob_weight)
-
-            chA.pulse_width_percent(MAX_SPEED)
-
-        elif ROTATE == 'counter_clockwise':
-            if left_blob_weight >= 2500:
-                right_blob_weight -= 500
-
-            # Поменять на /400 на финале (?)
-            servo.angle(MAX_ANGLE * (right_blob_weight - 900) / 1300 + ZERO_ANGLE)
-
-            print("right_blob_weight:", right_blob_weight)
-
-            chA.pulse_width_percent(MAX_SPEED)
-    else:
-        chA.pulse_width_percent(MAX_SPEED)
-
-    # Подсчет кол-ва пройденных поворотов (прохождение каждой линии - половина поворота)
-    if LASTFLAG != FLAG:
-        LASTFLAG = FLAG
-        CORNER_COUNT += 0.5
-
-    if green_cube_weight == 0 and red_cube_weight == 0:
-        p_dx = 0
-
-    #img.binary(thresholds_red_cube)
-    #img.erode(2)
-    #img.dilate(2)
-    #img.binary(thresholds_red_test)
